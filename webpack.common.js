@@ -14,7 +14,24 @@ export default {
 
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/template.html",
+      filename: 'index.html',
+      template: "./src/index.html",
+      chunks: ['main']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'completed.html',
+      template: "./src/completed.html",
+      chunks: ['completed']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'filter.html',
+      template: "./src/filter.html",
+      chunks: ['filter']
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'today.html',
+      template: "./src/today.html",
+      chunks: ['today']
     }),
   ],
   module: {

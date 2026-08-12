@@ -1,0 +1,78 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root{
+    --sidebar-background-color:rgba(128, 128, 128, 0.08);
+}
+
+body{
+    min-height: 100vh;
+}
+
+#header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+
+    font-size: 1.5rem;
+    background-color: rgb(248, 85, 44);
+}
+
+.body-wrapper{
+    display: grid;
+    grid-template-columns: 300px 1fr;
+
+}
+
+.sidebar{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    padding: 1.8rem 0.8rem;
+    height: 100vh;
+
+
+    background-color: var(--sidebar-background-color);
+}
+
+.siderbar-tophalf{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sidebar-icons{
+    width: 30px;
+    height: 30px;
+}
+
+#calendar-icon{
+    filter: invert(13%) sepia(96%) saturate(3888%) hue-rotate(292deg) brightness(96%) contrast(95%);
+}
+
+#today-icon{
+    filter: invert(57%) sepia(41%) saturate(7076%) hue-rotate(87deg) brightness(98%) contrast(106%);
+}
+
+#filter-icon{
+    filter: invert(84%) sepia(34%) saturate(3798%) hue-rotate(341deg) brightness(100%) contrast(94%);
+}
+
+#completed-icon{
+    filter: invert(57%) sepia(41%) saturate(7076%) hue-rotate(87deg) brightness(98%) contrast(106%);
+}
+
+.sidebar-tabs{
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.main-content-wrapper{
+
+}
