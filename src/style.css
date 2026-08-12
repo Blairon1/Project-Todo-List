@@ -6,10 +6,13 @@
 
 :root{
     --sidebar-background-color:rgba(128, 128, 128, 0.08);
+    --sidebar-background-color-darken:rgba(128, 128, 128, 0.2);
+    --white: #ffffff;
 }
 
 body{
     min-height: 100vh;
+    width: 100vw;
 }
 
 #header{
@@ -73,6 +76,60 @@ body{
     gap: 0.6rem;
 }
 
-.main-content-wrapper{
+.sidebar-tabs:hover{
+    cursor: pointer;
+    background-color: var(--sidebar-background-color-darken);
+}
 
+#calendarPage{
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+}
+
+option:disabled {
+  color: #999999;
+  background-color: #eeeeee;
+  font-style: italic;
+}
+
+
+#calendar-container{
+    display: grid;
+    grid-template-rows: auto 1fr;
+    justify-content: center;
+    margin: 0px, auto;
+}
+
+#calendar-header{
+    display: flex; 
+}
+
+.calendar-days{
+    padding-left: 4rem;
+    margin-right: 5rem;   
+    color: var(--white);
+}
+
+#calendar{
+    width: 1200px;
+    height: 700px;
+    display: flex;
+    justify-content: center;
+    padding-top: 10%;
+    background-color: var(--white); 
+    
+
+}
+
+.calendarDay{
+    flex-grow: 1;
+    min-width: 0;
+
+    padding: 0.7rem;
+    background-color: var(--white); 
+}
+
+#welcome-caption{
+    font-size: 3.5rem;
+    font-weight: bold;
 }

@@ -6,23 +6,23 @@
     <title>To-do List</title>
 </head>
 <body>
-    <div id="header">Todo List</div>
+    <div id="header">Todo List Odin</div>
     <div class="body-wrapper">
         <div class="sidebar">
             <div class="siderbar-tophalf">
-                <div id="calendar" class="sidebar-tabs">
+                <div id="calendar-tab" class="sidebar-tabs">
                     <img src="assets/icons/calendar-blank.svg" alt="Calendar Icon" class="sidebar-icons" id="calendar-icon">
                     <p>Calendar</p>
                 </div>
-                <div id="today" class="sidebar-tabs">
+                <div id="today-tab" class="sidebar-tabs">
                     <img src="assets/icons/calendar-today.svg" alt="Today Icon" class="sidebar-icons" id="today-icon">
                     <p>Today</p>
                 </div>
-                <div id="filters" class="sidebar-tabs">
+                <div id="filters-tab" class="sidebar-tabs">
                     <img src="assets/icons/view-grid-outline.svg" alt="Filters & Labels Icon" class="sidebar-icons" id="filter-icon">
                     <p>Filters & Labels</p>
                 </div>
-                <div id="completed" class="sidebar-tabs">
+                <div id="completed-tab" class="sidebar-tabs">
                     <img src="assets/icons/checkbox-multiple-marked-circle.svg" alt="Completed Icon" class="sidebar-icons" id="completed-icon">
                     <p>Completed</p>
                 </div>
@@ -34,7 +34,44 @@
         </div>
 
 
-        <div class="main-content-wrapper"></div>
+        <div id="calendarPage">
+            <p id="calendar-title">Calendar</p>
+            <div id="calendar-month-container">
+                <p id="calendar-month">Current Month (TBA)</p>
+                <form action="" method="POST">
+                    <label for="months">Please select a month:</label>
+                    <select name="months" id="months">
+                        <option value="" selected disabled>Please select a month:</option>
+                        <option value="january">January</option>
+                        <option value="february">February</option>
+                        <option value="march">March</option>
+                        <option value="april">April</option>
+                        <option value="may">May</option>
+                        <option value="june">June</option>
+                        <option value="july">July</option>
+                        <option value="august">August</option>
+                        <option value="september">September</option>
+                        <option value="october">October</option>
+                        <option value="november">November</option>
+                        <option value="december">December</option>
+                    </select>
+                </form>
+            </div>
+            <div id="calendar-container">
+                <div id="calendar-header">
+                    <p class="calendar-days">Sun</p>
+                    <p class="calendar-days">Mon</p>
+                    <p class="calendar-days">Tue</p>
+                    <p class="calendar-days">Wed</p>
+                    <p class="calendar-days">Thu</p>
+                    <p class="calendar-days">Fri</p>
+                    <p class="calendar-days">Sat</p>
+                </div>
+                <div id="calendar">
+                    <p id="welcome-caption">Welcome to your personal todo-list!</p>
+                </div>
+            </div>
+        </div>
     </div>
     
 

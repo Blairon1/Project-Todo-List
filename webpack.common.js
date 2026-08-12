@@ -20,17 +20,17 @@ export default {
     }),
     new HtmlWebpackPlugin({
       filename: 'completed.html',
-      template: "./src/completed.html",
+      template: "./src/pages/completed.html",
       chunks: ['completed']
     }),
     new HtmlWebpackPlugin({
       filename: 'filter.html',
-      template: "./src/filter.html",
+      template: "./src/pages/filter.html",
       chunks: ['filter']
     }),
     new HtmlWebpackPlugin({
       filename: 'today.html',
-      template: "./src/today.html",
+      template: "./src/pages/today.html",
       chunks: ['today']
     }),
   ],
