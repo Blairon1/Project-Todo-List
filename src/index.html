@@ -6,7 +6,7 @@
     <title>To-do List</title>
 </head>
 <body>
-    <div id="header">Todo List Odin</div>
+    <div id="header">To-Do List Odin</div>
     <div class="body-wrapper">
         <div class="sidebar">
             <div class="siderbar-tophalf">
@@ -28,52 +28,95 @@
                 </div>
             </div>
             <div class="sidebar-bottomhalf">
-                Projects
+                <div id="project-title">
+                    <p id="project-title-btn">Projects</p>
+                    <img src="assets/icons/plus.svg" alt="Plus Icon" id="plus-icon">
+                </div>
                 <div class="projects" id="projects"></div>
             </div>
         </div>
 
 
-        <div id="calendarPage">
-            <p id="calendar-title">Calendar</p>
-            <div id="calendar-month-container">
-                <p id="calendar-month">Current Month (TBA)</p>
-                <form action="" method="POST">
-                    <label for="months">Please select a month:</label>
-                    <select name="months" id="months">
-                        <option value="" selected disabled>Please select a month:</option>
-                        <option value="january">January</option>
-                        <option value="february">February</option>
-                        <option value="march">March</option>
-                        <option value="april">April</option>
-                        <option value="may">May</option>
-                        <option value="june">June</option>
-                        <option value="july">July</option>
-                        <option value="august">August</option>
-                        <option value="september">September</option>
-                        <option value="october">October</option>
-                        <option value="november">November</option>
-                        <option value="december">December</option>
-                    </select>
-                </form>
-            </div>
-            <div id="calendar-container">
-                <div id="calendar-header">
-                    <p class="calendar-days">Sun</p>
-                    <p class="calendar-days">Mon</p>
-                    <p class="calendar-days">Tue</p>
-                    <p class="calendar-days">Wed</p>
-                    <p class="calendar-days">Thu</p>
-                    <p class="calendar-days">Fri</p>
-                    <p class="calendar-days">Sat</p>
-                </div>
-                <div id="calendar">
-                    <p id="welcome-caption">Welcome to your personal todo-list!</p>
-                </div>
-            </div>
+        <div id="home-page">
+            
         </div>
+
+
+        <dialog id="project-modal">
+            <form action="" method="POST" id="create-project-form">
+                <div id="create-project-header">
+                    <img src="assets/icons/folder-arrow-up.svg" alt="Folder Icon" id="folder-icon">
+                    <p>New Project</p>
+                    <img src="assets/icons/close-thick.svg" alt="Close Icon" id="close-icon">
+                </div>
+                <div id="project-input-container">
+                    <input type="text" name="projectName" id="project-name" placeholder="Enter Project Name:" minlength="1" maxlength="25">
+                </div>
+
+                <div id="create-project-buttons">
+                    <button type="submit" id="create-project-btn">Submit</button>
+                </div>
+            </form>
+        </dialog>
+
+        <dialog id="task-container-modal">
+            <div id="todo-list-chart">
+                <div class="todo-list-row-header">
+                    <div id="task-number-header">#</div>
+                    <div id="task-description-header">To-Do List</div>
+                    <div id="task-status-header">Status</div>
+                    <div id="task-priority-header">Priority</div>
+                    <div id="task-date-header">Due Date</div>
+                </div>
+                <div id="task-row">
+                    <div id="new-row-wrapper" class="new-row-wrapper">
+                        <div class="task" id="task-number">1</div>
+                        <div class="task" id="task-description">To get some bitches</div>
+                        <div class="task" id="task-status">
+                            <button id="task-status-btn">Not Completed</button>
+                        </div>
+                        <div class="task" id="task-priority">High</div>
+                        <div class="task" id="task-date">2026-08-17</div>
+                    </div>
+                </div>
+                <div id="create-task-row">
+                    <div id="create-task-btn">Create Task</div>
+                </div>
+            </div>
+        </dialog>
+
+        <dialog id="create-new-task">
+            <h2 style="margin-bottom: 1rem;">Complete the following information</h2>
+            <form id="task-form">
+                <label for="taskD">Task Descripton:
+                    <textarea id="taskD" name="taskD" rows="5" cols="30" placeholder="Type here..."></textarea><br>
+                </label>
+
+
+                <label for="taskP">Prority
+                    <br><select id="taskP" name="taskP">
+                    <option value="High">High</option>
+                    <option value="Medium">Medium</option>
+                    <option value="Low">Low</option>
+                </select>
+                </label><br>
+
+
+                <label for="taskDue">Due Date
+                   <br> <input type="date" id="taskDue" name="taskDue">
+                </label><br>
+
+                <div class="task-creation-btns">
+                    <button type="button" id="close-taskcreation">Close</button>
+                    <button type="submit" id="save-taskcreation">Save</button>
+                </div>
+            </form>
+        </dialog>
+
+        
     </div>
     
 
 </body>
+
 </html>

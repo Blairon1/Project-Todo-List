@@ -1,0 +1,283 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root{
+    --sidebar-background-color:rgba(128, 128, 128, 0.08);
+    --sidebar-background-color-darken:rgba(128, 128, 128, 0.2);
+    --white: #ffffff;
+}
+
+body{
+    min-height: 100vh;
+    width: 100vw;
+}
+
+/* Shared Sidebar and Header Styling */
+
+#header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+
+    font-size: 1.5rem;
+    background-color: #f8552c;
+}
+
+.body-wrapper{
+    display: grid;
+    grid-template-columns: 300px 1fr;
+
+}
+
+.sidebar{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+
+    padding: 1.8rem 0.8rem;
+    height: 100vh;
+
+
+    background-color: var(--sidebar-background-color);
+}
+
+.siderbar-tophalf{
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.sidebar-icons{
+    width: 30px;
+    height: 30px;
+}
+
+#calendar-icon{
+    filter: invert(13%) sepia(96%) saturate(3888%) hue-rotate(292deg) brightness(96%) contrast(95%);
+}
+
+#today-icon{
+    filter: invert(57%) sepia(41%) saturate(7076%) hue-rotate(87deg) brightness(98%) contrast(106%);
+}
+
+#filter-icon{
+    filter: invert(84%) sepia(34%) saturate(3798%) hue-rotate(341deg) brightness(100%) contrast(94%);
+}
+
+#completed-icon{
+    filter: invert(57%) sepia(41%) saturate(7076%) hue-rotate(87deg) brightness(98%) contrast(106%);
+}
+
+.sidebar-tabs{
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.sidebar-tabs:hover{
+    cursor: pointer;
+    background-color: var(--sidebar-background-color-darken);
+}
+
+#project-title{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+    padding: 0.4rem;
+    height: 30px;
+}
+
+#project-title-btn{
+    width: 225px;
+}
+
+#project-title:hover{
+    background-color: var(--sidebar-background-color-darken);
+    cursor: pointer;
+}
+
+#plus-icon{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+#plus-icon:hover{
+    background-color: var(--white);
+    border-radius: 2.3rem;
+}
+
+#projects{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-left: 1rem;
+}
+
+.new-project-container{
+    display: flex;
+    justify-content: space-between;
+    height: 50px;
+    padding: 1rem;
+}
+
+.new-project-container:hover{
+    cursor: pointer;
+    background-color: var(--sidebar-background-color-darken);
+}
+
+.new-project-container.selected{
+    background-color: var(--sidebar-background-color-darken);
+}
+
+.new-projects{
+    font-weight: 700;
+    font-size: 1.2rem;
+    width: 100%;
+    height: 100%;
+}
+
+#project-delete-icon{
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+#project-delete-icon:hover{
+    border-radius: 2rem;
+    background-color: #797979;
+}
+
+
+/* Home Page Styling */
+
+#home-page{
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+}
+
+option:disabled {
+  color: #999999;
+  background-color: #eeeeee;
+  font-style: italic;
+}
+
+
+#calendar-container{
+    display: grid;
+    grid-template-rows: auto 1fr;
+    justify-content: center;
+    margin: 0px, auto;
+}
+
+#calendar-header{
+    display: flex; 
+}
+
+.calendar-days{
+    padding-left: 4rem;
+    margin-right: 5rem;   
+    color: var(--white);
+}
+
+#calendar {
+    width: 1200px;
+    height: 700px;
+
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+
+    gap: 2px;
+    padding: 2px;
+
+    background-color: #000000;
+}
+
+.calendarDay {
+    min-width: 0;
+    padding: 0.7rem;
+
+    background-color: var(--white);
+}
+
+.next-month-day {
+    opacity: 0.7;
+}
+
+#welcome-caption{
+    font-size: 3.5rem;
+    font-weight: bold;
+}
+
+#project-modal{
+    width: 600px;
+    height: 350px;
+    padding: 2rem;
+    margin: auto;
+}
+
+#project-modal p{
+    font-size: 3.5rem;
+    font-weight: 600;
+    color: #f8552c;
+    margin-right: auto;
+}
+
+#create-project-form{
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+#create-project-header{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+#close-icon{
+    width: 50px;
+    height: 50px;
+    filter: invert(14%) sepia(86%) saturate(7050%) hue-rotate(1deg) brightness(104%) contrast(117%);
+}
+
+#folder-icon{
+    width: 50px;
+    height: 50px;
+    filter: invert(47%) sepia(92%) saturate(3548%) hue-rotate(344deg) brightness(100%) contrast(95%);
+}
+
+#close-icon:hover{
+    cursor: pointer;
+    filter: invert(14%) sepia(86%) saturate(7050%) hue-rotate(1deg) brightness(54%) contrast(117%);
+}
+
+#project-input-container {
+    display: flex;
+}
+
+#project-input-container input{
+    width: 450px;
+    height: 50px;
+    padding: 1rem;
+    font-size: 1.3rem;
+}
+
+#create-project-buttons button{
+    width: 450px;
+    height: 50px;
+
+    background-color: #f8552c;
+    color: var(--white);
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+#create-project-buttons button:hover{
+    cursor: pointer;
+    background-color: #8a3019;
+}

@@ -18,21 +18,6 @@ export default {
       template: "./src/index.html",
       chunks: ['main']
     }),
-    new HtmlWebpackPlugin({
-      filename: 'completed.html',
-      template: "./src/pages/completed.html",
-      chunks: ['completed']
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'filter.html',
-      template: "./src/pages/filter.html",
-      chunks: ['filter']
-    }),
-    new HtmlWebpackPlugin({
-      filename: 'today.html',
-      template: "./src/pages/today.html",
-      chunks: ['today']
-    }),
   ],
   module: {
     rules: [

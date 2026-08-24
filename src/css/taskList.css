@@ -1,0 +1,184 @@
+/*
+ * ============================================================
+ * TASK ROW HEADER ROW STYLING
+ * ============================================================
+ */
+
+#task-container-modal{
+    height: 600px;
+    width: 1200px;
+    padding: 1rem;
+}
+
+#todo-list-chart{
+    display: flex;
+    flex-direction: column;
+    background-color: rgba(0,0,0,1);
+    gap: 0.25rem;
+    padding: 1rem;
+}
+
+.todo-list-row-header{
+    display: grid;
+    grid-template-columns: 1fr 3fr 1.5fr 1.5fr 1.5fr;
+
+    background-color: rgba(0,0,0,1);
+    font-weight: bold;
+    font-size: 1.2rem;
+    gap: 2px;
+}
+
+.todo-list-row-header div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(255, 195, 84);
+    
+    height: 75px;
+}
+
+/*
+ * ============================================================
+ * NEWLY CREATED TASK ROWS STYLING
+ * ============================================================
+ */
+
+ #task-row{
+    display: flex;
+    flex-direction: column;
+ }
+
+#new-row-wrapper{  
+    display: grid;
+    grid-template-columns: 1fr 3fr repeat(3, 1.5fr);
+    background-color: rgba(0,0,0,1);
+    font-weight: bold;
+    font-size: 1.2rem;
+    gap: 2px;
+}
+
+#new-row-wrapper:hover > div{
+    cursor: pointer;
+    background-color: #72541c;
+}
+
+.task{
+    height: 100px;
+    background-color: #ffc354;
+    padding: 2rem;
+}
+
+#task-number,
+#task-status,
+#task-priority,
+#task-date{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#task-description{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 1rem;
+    font-size: 1rem;
+}
+
+#task-status-btn{
+    width: 130px;
+    height: 50px;
+
+    background-color: rgb(94, 30, 22);
+    border-radius: 2.1rem;
+
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/*
+ * ============================================================
+ * CREATE TASK ROW
+ * ============================================================
+ */
+
+#create-task-row{
+    height: 100px;
+    width: 100%;
+    background-color: rgb(255, 195, 84);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#create-task-btn{
+    width: 400px;
+    height: 75px;
+
+    font-size: 1.7rem;
+    font-weight: 700;
+    border-radius: 1.5rem;
+    
+    color: white;
+    background-color: rgba(0, 0, 128, 1);
+}
+
+ #create-task-btn:hover{
+    cursor: pointer;
+    background-color: rgba(0, 0, 128, 0.7);
+ }
+
+
+ /*
+ * ============================================================
+ * CREATE A NEW TASK STYLING
+ * ============================================================
+ */
+
+ #create-new-task{
+    width: 400px;
+    height: 310px;
+    padding: 1rem;
+    margin: auto auto;
+}
+
+#task-form{
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+}
+
+textarea{
+   padding: 0.5rem;
+   width: 250px;
+   height: 50px;
+}
+
+select{
+    width: 250px;
+}
+
+input[type="date"]{
+    width: 250px;
+}
+
+.task-creation-btns{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+#close-taskcreation{
+    
+}
+
+#save-taskcreation{
+    
+}
