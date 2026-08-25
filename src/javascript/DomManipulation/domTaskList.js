@@ -1,4 +1,5 @@
-import {allProjects}  from "./domProject.js";
+import allProjects  from "../Logic/projectCollection.js";
+import {getAllProjectsFromLocalStorage, getProjectFromLocalStorage} from "../LocalStorageMethods/getProject.js";
 
 // ============================================================
 // DOM REFERENCES
@@ -20,7 +21,6 @@ const $createTaskForm = document.querySelector('#task-form');
 let currentJSProject = null;
 let $currentSelectedProjectTab = null;
 let currentJSProjectTask = null;
-//let $currentSelectedTaskRow = null;
 
 
 // ============================================================
@@ -38,13 +38,11 @@ $projects.addEventListener('click', (event) => {
 
     // Handle highlighing the selected project
     $allClickedProjects .forEach(project => {
-        console.log(project);
         if (project.dataset.ID === $clickedProject.dataset.ID) {
             project.classList.add('selected');
 
             const $highlightedProject = project; // Save this variable to local storage at a later date
-            localStorage.setItem("$highlightedProject", JSON.stringify($highlightedProject.outerHTML));
-        } else {
+        }else{
             project.classList.remove('selected');
         }
     });
@@ -55,11 +53,12 @@ $projects.addEventListener('click', (event) => {
     for(const project of allProjects.projects){
         if($currentSelectedProjectTab.dataset.ID == project.ID){
 
-            // Current project selected by the user found in the "backend"
+            // Current project selected by the user found in the local storage
             currentJSProject = project;
+            const projectFromLocalStorage = getProjectFromLocalStorage(currentJSProject.ID);
 
             // Upon clicking the project tab, render the entire home page
-            renderProjectPage(currentJSProject, $currentSelectedProjectTab);
+            renderProjectPage(projectFromLocalStorage, $currentSelectedProjectTab);
         }
     }
 
@@ -96,7 +95,10 @@ $createTaskForm.addEventListener('submit', (event)=>{
         );
     $createTaskDialog.close();
     $createTaskForm.reset(); 
-    renderProjectPage(currentJSProject, $currentSelectedProjectTab);
+
+    const projectFromLocalStorage = getProjectFromLocalStorage(currentJSProject.ID);
+
+    renderProjectPage(projectFromLocalStorage, $currentSelectedProjectTab);
 });
 
 

@@ -1,9 +1,8 @@
 import Project from '../Logic/project.js';
-import projectCollection from '../Logic/projectCollection.js';
+import allProjects  from "../Logic/projectCollection.js";
+import {getAllProjectsFromLocalStorage} from "../LocalStorageMethods/getProject.js";
 import closeIcon from '../../assets/icons/close.svg';
 import {loadCalendarPage} from './domCalendar.js';
-
-export const allProjects = projectCollection();
 
 /*
  * ============================================================
@@ -49,9 +48,6 @@ $createProjectForm.addEventListener('submit', (event)=>{
     // Create Project object with description and empty task list
     const newProject = new Project($createProjectForm.elements.projectName.value, []);
 
-    // Save it in local Storage
-    localStorage.setItem($createProjectForm.elements.projectName.value, JSON.stringify(newProject));
-
     // Add a new project container
     const newProjectTabContainer = document.createElement('div');
     newProjectTabContainer.classList.add('new-project-container');
@@ -62,7 +58,7 @@ $createProjectForm.addEventListener('submit', (event)=>{
     const newProjectTab = document.createElement('div'); 
     newProjectTab.classList.add('new-projects');
     newProjectTab.textContent = $createProjectForm.elements.projectName.value;
-    newProjectTab.dataset.ID = newProject.ID; 
+    newProjectTab.dataset.ID = newProject.ID;
     newProjectTabContainer.appendChild(newProjectTab);
 
     // Add a close icon button to delete project
@@ -70,12 +66,13 @@ $createProjectForm.addEventListener('submit', (event)=>{
     deleteProjectIcon.src = closeIcon;
     deleteProjectIcon.alt = "Delete Icon";
     deleteProjectIcon.id = "project-delete-icon";
-    deleteProjectIcon.dataset.ID = newProject.ID; 
+    deleteProjectIcon.dataset.ID = newProject.ID;
     newProjectTabContainer.appendChild(deleteProjectIcon);
     
 
     $projectsTab.appendChild(newProjectTabContainer); // Add to the HTML projects tab
     allProjects.addProject(newProject);               // Add the new project object to the projectCollection object
+
 
     $createProjectDialog.close();
     $createProjectForm.elements.projectName.value = '';
@@ -102,3 +99,56 @@ $projectsTab.addEventListener('click', (event) => {
     }
 
 });
+
+
+/*
+ * ============================================================
+ * BUILD PROJECT SIDEBAR
+ * ============================================================
+ */
+function buildProjectSidebar(){
+    const allProjectsSavedLS = getAllProjectsFromLocalStorage();
+    
+    if(allProjectsSavedLS.length > 0){
+        for(let i = 0; i < allProjectsSavedLS.length; i++){
+            // Create Project object with description and empty task list
+            const newProject = new Project(allProjectsSavedLS[i].name, allProjectsSavedLS[i].taskList);
+            newProject.ID = allProjectsSavedLS[i].ID;
+
+            // Add a new project container
+            const newProjectTabContainer = document.createElement('div');
+            newProjectTabContainer.classList.add('new-project-container');
+            newProjectTabContainer.dataset.ID = newProject.ID;
+
+
+            // Add the new project to the tab in the sidebar
+            const newProjectTab = document.createElement('div'); 
+            newProjectTab.classList.add('new-projects');
+            newProjectTab.textContent = allProjectsSavedLS[i].name;
+            newProjectTab.dataset.ID = newProject.ID;
+            newProjectTabContainer.appendChild(newProjectTab);
+
+            // Add a close icon button to delete project
+            const deleteProjectIcon = document.createElement('img');
+            deleteProjectIcon.src = closeIcon;
+            deleteProjectIcon.alt = "Delete Icon";
+            deleteProjectIcon.id = "project-delete-icon";
+            deleteProjectIcon.dataset.ID = newProject.ID;
+            newProjectTabContainer.appendChild(deleteProjectIcon);
+            
+
+            $projectsTab.appendChild(newProjectTabContainer); // Add to the HTML projects tab
+            allProjects.addProject(newProject);               // Add the new project object to the projectCollection object
+        }
+    }
+}
+
+
+/*
+ * ============================================================
+ * RENDER PROJECT SIDEBAR
+ * ============================================================
+ */
+(function renderProjectSiderbar(){
+    buildProjectSidebar();
+})();

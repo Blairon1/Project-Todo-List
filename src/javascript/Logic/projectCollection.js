@@ -1,4 +1,4 @@
-export default function projectCollection(){
+function projectCollection(){
     let projects = [];
     let projectsByDate = [];
     let projectsByPrority = [
@@ -10,6 +10,7 @@ export default function projectCollection(){
 
     function addProject(project){
         projects.push(project);
+        localStorage.setItem("allProjects", JSON.stringify(projects));
     }
     
     function deleteProject(project){
@@ -18,6 +19,7 @@ export default function projectCollection(){
                 projects.splice(i, 1);
             }
         }
+        localStorage.setItem("allProjects", JSON.stringify(projects));
     }
 
     return{
@@ -26,3 +28,6 @@ export default function projectCollection(){
         deleteProject,
     };
 }
+const allProjects = projectCollection();
+
+export default allProjects;

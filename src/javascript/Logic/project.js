@@ -1,5 +1,7 @@
 import Task from "./task.js"
 import { format, compareAsc } from "date-fns";
+import allProjects from "./projectCollection.js";
+
 export default class Project {
 
     static currentTaskNumber = 1;
@@ -14,6 +16,8 @@ export default class Project {
         const task = new Task(Project.currentTaskNumber, taskDescription, taskPriority, taskDueDate);
         this.taskList.push(task);
         Project.currentTaskNumber++;
+
+        localStorage.setItem("allProjects", JSON.stringify(allProjects.projects));
     }
 
     deleteTask(taskNumber){
@@ -22,11 +26,8 @@ export default class Project {
                 this.taskList.splice(index, index + 1);
             }
         })
-    }
 
-    getID(){
-        return this.ID;
+        localStorage.setItem("allProjects", JSON.stringify(allProjects.projects));
     }
-
     
 };
