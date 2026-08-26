@@ -16,7 +16,7 @@ export default class Task{
         localStorage.setItem("allProjects", JSON.stringify(allProjects.projects));
     }
 
-    editTaskDecription(newDescription){
+    editTaskDescription(newDescription){
         this.taskDescription = newDescription;
         localStorage.setItem("allProjects", JSON.stringify(allProjects.projects));
     }

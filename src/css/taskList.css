@@ -20,7 +20,7 @@
 
 .todo-list-row-header{
     display: grid;
-    grid-template-columns: 1fr 3fr 1.5fr 1.5fr 1.5fr;
+    grid-template-columns: 3fr repeat(3, 1.5fr);
 
     background-color: rgba(0,0,0,1);
     font-weight: bold;
@@ -50,7 +50,7 @@
 
 #new-row-wrapper{  
     display: grid;
-    grid-template-columns: 1fr 3fr repeat(3, 1.5fr);
+    grid-template-columns: 3fr repeat(3, 1.5fr);
     background-color: rgba(0,0,0,1);
     font-weight: bold;
     font-size: 1.2rem;
@@ -181,4 +181,44 @@ input[type="date"]{
 
 #save-taskcreation{
     
+}
+
+/*
+ * ============================================================
+ * EDIT TASK STYLING
+ * ============================================================
+ */
+
+#edit-task-modal{
+    width: 400px;
+    height: 310px;
+    padding: 1rem;
+    margin: auto auto;
+}
+
+#edit-task-form{
+
+}
+
+.edit-task-input-containers{
+    display: flex;
+    flex-direction: column;
+}
+
+#editDescription{
+
+}
+
+#editPrority{
+
+}
+
+#editDueDate{
+
+}
+
+#save-edit-task-btn-container{
+    position: absolute;
+    bottom: 0;
+    right: 0;
 }

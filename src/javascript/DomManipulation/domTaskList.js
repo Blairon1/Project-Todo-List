@@ -1,5 +1,6 @@
 import allProjects  from "../Logic/projectCollection.js";
 import {getAllProjectsFromLocalStorage, getProjectFromLocalStorage} from "../LocalStorageMethods/getProject.js";
+import Task from "../Logic/task.js";
 
 // ============================================================
 // DOM REFERENCES
@@ -13,6 +14,10 @@ const $closeTaskDialog = document.querySelector('#close-taskcreation');
 const $createTaskDialog = document.querySelector('#create-new-task');
 const $createTaskForm = document.querySelector('#task-form');
 
+const $closeEditTaskDialog = document.querySelector('#close-edit-task-btn');
+const $createEditTaskDialog = document.querySelector('#edit-task-modal');
+const $createEditTaskForm = document.querySelector('#edit-task-form');
+
 
 // ============================================================
 // STATE
@@ -20,7 +25,7 @@ const $createTaskForm = document.querySelector('#task-form');
 
 let currentJSProject = null;
 let $currentSelectedProjectTab = null;
-let currentJSProjectTask = null;
+let currentJSTaskSelected= null;
 
 
 // ============================================================
@@ -114,17 +119,50 @@ $closeTaskDialog.addEventListener('click', ()=>{
 // ============================================================
 
 // Event Delegation, add an event to any nearest element of the projects container
-$taskRow.addEventListener('click', (event) => {
-
-    const $clickedRow = event.target.closest('.new-row-wrapper');
+$homePage.addEventListener('click', (event) => {
+    event.preventDefault();
+    const $clickedRow = event.target.closest('#new-row-wrapper');
 
     // If a project tab isn't clicked, ignore it
     if (!$clickedRow) return;
 
+    for(let i = 0; i < currentJSProject.taskList.length; i++){
+        if(currentJSProject.taskList[i].taskID == $clickedRow.dataset.ID){
+            currentJSTaskSelected = currentJSProject.taskList[i];
+        }
+    }
+
+    $createEditTaskDialog.showModal();
+    console.log(currentJSTaskSelected);
+
+    $createEditTaskForm.elements.editDescription.value = currentJSTaskSelected.taskDescription;
+    $createEditTaskForm.elements.editPrority.value = currentJSTaskSelected.taskPriority;
+    $createEditTaskForm.elements.editDueDate.value = currentJSTaskSelected.taskDueDate;
+
+
     console.log("Clicked!");
+    console.log($clickedRow);
 
 });
 
+$createEditTaskForm.addEventListener('submit', (event)=>{
+    event.preventDefault();
+
+    currentJSTaskSelected.editTaskDescription($createEditTaskForm.elements.editDescription.value);
+    currentJSTaskSelected.editTaskPriority($createEditTaskForm.elements.editPrority.value);
+    currentJSTaskSelected.editTaskDueDate($createEditTaskForm.elements.editDueDate.value);
+
+    $createEditTaskDialog.close();
+    $createEditTaskForm.reset();
+
+    const projectFromLocalStorage = getProjectFromLocalStorage(currentJSProject.ID);
+    renderProjectPage(projectFromLocalStorage, $currentSelectedProjectTab);
+});
+
+
+$closeEditTaskDialog.addEventListener('click', ()=>{
+    $createEditTaskDialog.close();
+});
 
 
 
@@ -173,10 +211,10 @@ function buildProjectListHeader(currentJSProject, currentSelectedProjectHTML){
     $todoListChart.appendChild($todoListRowHeader);
 
     // Create the column for the task numbers
-    const $taskNumberHeader = document.createElement('div');
-    $taskNumberHeader.id = "task-number-header";
-    $taskNumberHeader.textContent = "#";
-    $todoListRowHeader.appendChild($taskNumberHeader);
+    // const $taskNumberHeader = document.createElement('div');
+    // $taskNumberHeader.id = "task-number-header";
+    // $taskNumberHeader.textContent = "#";
+    // $todoListRowHeader.appendChild($taskNumberHeader);
 
     // Create the column for the task descriptions
     const $taskDescriptionHeader = document.createElement('div');
@@ -240,8 +278,6 @@ function buildProjectListHeader(currentJSProject, currentSelectedProjectHTML){
  * The HTML element for the entire todoList chart
  * 
  * 
- * @param {Object} currentJSProjectTask
- * The current select object of the project
  */
 
 
@@ -257,12 +293,12 @@ function buildProjectListTasks(currentHTMLProject, taskRowContainer, currentProj
 
 
             // Create task number column, add styling and add to the task-row container
-            const $taskNumber = document.createElement('div');
-            $taskNumber.id = "task-number" 
-            $taskNumber.classList.add('task');
-            $taskNumber.textContent = task.taskNumber;
-            $taskNumber.dataset.ID = task.ID;
-            newlyCreatedRow.appendChild($taskNumber);
+            // const $taskNumber = document.createElement('div');
+            // $taskNumber.id = "task-number" 
+            // $taskNumber.classList.add('task');
+            // $taskNumber.textContent = task.taskNumber;
+            // $taskNumber.dataset.ID = task.ID;
+            // newlyCreatedRow.appendChild($taskNumber);
 
             // Create task description column, add styling and add to the task-row container
             const $taskDescription = document.createElement('div');

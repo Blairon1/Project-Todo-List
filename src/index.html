@@ -113,6 +113,36 @@
             </form>
         </dialog>
 
+
+        <dialog id="edit-task-modal">
+            <form action="" method="POST" id="edit-task-form">
+                <div id="edit-task-header">
+                    <p>Edit Task</p>
+                </div>
+                <div class="edit-task-input-containers">
+                    <label for="editDescription">Description</label>
+                    <textarea name="editDescription" id="editDescription" rows="5" cols="30"></textarea>
+                </div>
+                <div class="edit-task-input-containers">
+                    <label for="editPrority">Priority</label>
+                        <select id="editPrority" name="editPrority">
+                            <option value="High">High</option>
+                            <option value="Medium">Medium</option>
+                            <option value="Low">Low</option>
+                        </select>
+                </div>
+                <div class="edit-task-input-containers">
+                    <label for="editDueDate">Due Dates</label>
+                    <input type="date" id="editDueDate" name="editDueDate">
+                </div>
+
+                <div id="save-edit-task-btn-container">
+                    <button type="button" id="close-edit-task-btn" class="edit-task-form-btns">Close</button>
+                    <button type="submit" id="save-edit-task-btn" class="edit-task-form-btns">Save</button>
+                </div>
+            </form>
+        </dialog>
+
         
     </div>
     

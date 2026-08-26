@@ -109,11 +109,21 @@ $projectsTab.addEventListener('click', (event) => {
 function buildProjectSidebar(){
     const allProjectsSavedLS = getAllProjectsFromLocalStorage();
     
-    if(allProjectsSavedLS.length > 0){
-        for(let i = 0; i < allProjectsSavedLS.length; i++){
+    if(allProjectsSavedLS!= null){
+        for(let projectIndex = 0; projectIndex < allProjectsSavedLS.length; projectIndex++){
             // Create Project object with description and empty task list
-            const newProject = new Project(allProjectsSavedLS[i].name, allProjectsSavedLS[i].taskList);
-            newProject.ID = allProjectsSavedLS[i].ID;
+            const newProject = new Project(allProjectsSavedLS[projectIndex].name, []);
+            newProject.ID = allProjectsSavedLS[projectIndex].ID;
+
+            for(let taskIndex = 0; taskIndex < allProjectsSavedLS[projectIndex].taskList.length; taskIndex++){
+                newProject.createTask
+                    (
+                      allProjectsSavedLS[projectIndex].taskList[taskIndex].taskDescription // Creating a new task ensures methods are preserved after JSON parsing
+                    , allProjectsSavedLS[projectIndex].taskList[taskIndex].taskPriority
+                    , allProjectsSavedLS[projectIndex].taskList[taskIndex].taskDueDate
+                    );
+                newProject.taskList[taskIndex].taskID = allProjectsSavedLS[projectIndex].taskList[taskIndex].taskID; // Maintain the same ID
+            }
 
             // Add a new project container
             const newProjectTabContainer = document.createElement('div');
@@ -124,7 +134,7 @@ function buildProjectSidebar(){
             // Add the new project to the tab in the sidebar
             const newProjectTab = document.createElement('div'); 
             newProjectTab.classList.add('new-projects');
-            newProjectTab.textContent = allProjectsSavedLS[i].name;
+            newProjectTab.textContent = allProjectsSavedLS[projectIndex].name;
             newProjectTab.dataset.ID = newProject.ID;
             newProjectTabContainer.appendChild(newProjectTab);
 
