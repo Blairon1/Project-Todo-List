@@ -1,6 +1,7 @@
 import allProjects  from "../Logic/projectCollection.js";
 import {getAllProjectsFromLocalStorage, getProjectFromLocalStorage} from "../LocalStorageMethods/getProject.js";
 import Task from "../Logic/task.js";
+import Project from "../Logic/project.js";
 
 // ============================================================
 // DOM REFERENCES
@@ -14,9 +15,10 @@ const $closeTaskDialog = document.querySelector('#close-taskcreation');
 const $createTaskDialog = document.querySelector('#create-new-task');
 const $createTaskForm = document.querySelector('#task-form');
 
-const $closeEditTaskDialog = document.querySelector('#close-edit-task-btn');
+const $closeEditTaskDialog = document.querySelector('#close-edit-task-icon');
 const $createEditTaskDialog = document.querySelector('#edit-task-modal');
 const $createEditTaskForm = document.querySelector('#edit-task-form');
+const $deleteTaskBtn = document.querySelector('#delete-edit-task-btn');
 
 
 // ============================================================
@@ -133,15 +135,10 @@ $homePage.addEventListener('click', (event) => {
     }
 
     $createEditTaskDialog.showModal();
-    console.log(currentJSTaskSelected);
 
     $createEditTaskForm.elements.editDescription.value = currentJSTaskSelected.taskDescription;
     $createEditTaskForm.elements.editPrority.value = currentJSTaskSelected.taskPriority;
     $createEditTaskForm.elements.editDueDate.value = currentJSTaskSelected.taskDueDate;
-
-
-    console.log("Clicked!");
-    console.log($clickedRow);
 
 });
 
@@ -163,6 +160,27 @@ $createEditTaskForm.addEventListener('submit', (event)=>{
 $closeEditTaskDialog.addEventListener('click', ()=>{
     $createEditTaskDialog.close();
 });
+
+
+// ============================================================
+// DELETE TASK BUTTON
+// ============================================================
+$deleteTaskBtn.addEventListener('click', ()=>{
+    console.log(currentJSTaskSelected);
+    console.log(currentJSTaskSelected.taskID);
+    currentJSProject.deleteTask(currentJSTaskSelected.taskID);
+    console.log(currentJSProject.taskList);
+
+
+    $createEditTaskDialog.close();
+    alert("Task Deleted!");
+    renderProjectPage(getProjectFromLocalStorage(currentJSProject.ID), $currentSelectedProjectTab);
+});
+
+
+// ============================================================
+// COMPLETE TASK BUTTON
+// ============================================================
 
 
 

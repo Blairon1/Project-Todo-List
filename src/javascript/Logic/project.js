@@ -21,11 +21,13 @@ export default class Project {
     }
 
     deleteTask(taskNumber){
-        this.taskList.forEach((task,index)=>{
-            if(task.taskNumber == taskNumber){
-                this.taskList.splice(index, index + 1);
+        for(let taskIndex = 0; taskIndex < this.taskList.length; taskIndex++){
+            if(this.taskList[taskIndex].taskID == taskNumber){
+                console.log(`Found you: ${this.taskList[taskIndex].taskDescription}`);
+                this.taskList.splice(taskIndex, taskIndex + 1);
+                console.table(this.taskList);
             }
-        })
+        }
 
         localStorage.setItem("allProjects", JSON.stringify(allProjects.projects));
     }
