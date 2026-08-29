@@ -4,6 +4,14 @@
  * ============================================================
  */
 
+ :root{
+    --task-row-color: #ffc354;
+    --hover-task: #72541c;
+    --completed-task: #2a721c;
+    --todo-list-lining: rgba(0,0,0,1);
+    --create-task-btn-color: rgba(0, 0, 128, 1);
+ }
+
 #task-container-modal{
     height: 600px;
     width: 1200px;
@@ -13,7 +21,7 @@
 #todo-list-chart{
     display: flex;
     flex-direction: column;
-    background-color: rgba(0,0,0,1);
+    background-color: var(--todo-list-lining);
     gap: 0.25rem;
     padding: 1rem;
 }
@@ -22,7 +30,7 @@
     display: grid;
     grid-template-columns: 3fr repeat(3, 1.5fr);
 
-    background-color: rgba(0,0,0,1);
+    background-color: var(--todo-list-lining);
     font-weight: bold;
     font-size: 1.2rem;
     gap: 2px;
@@ -32,7 +40,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(255, 195, 84);
+    background-color: var(--task-row-color);
     
     height: 75px;
 }
@@ -46,25 +54,38 @@
  #task-row{
     display: flex;
     flex-direction: column;
+    gap: 2px;
  }
 
-#new-row-wrapper{  
+.new-row-wrapper{  
     display: grid;
     grid-template-columns: 3fr repeat(3, 1.5fr);
-    background-color: rgba(0,0,0,1);
+    background-color: var(--todo-list-lining);
     font-weight: bold;
     font-size: 1.2rem;
     gap: 2px;
 }
 
-#new-row-wrapper:hover > div{
+.new-row-wrapper:hover > .task{
     cursor: pointer;
-    background-color: #72541c;
+    background-color: var(--hover-task);
 }
+
+.new-row-wrapper:hover > .task-completed{
+    cursor: default;
+    background-color: var(--completed-task);
+}
+
 
 .task{
     height: 100px;
-    background-color: #ffc354;
+    background-color: var(--task-row-color);
+    padding: 2rem;
+}
+
+.task-completed{
+    height: 100px;
+    background-color: var(--completed-task);
     padding: 2rem;
 }
 
@@ -82,8 +103,9 @@
     justify-content: flex-start;
     align-items: flex-start;
     padding: 1rem;
-    font-size: 1rem;
+    font-size: 1.2rem;
 }
+
 
 #task-status-btn{
     width: 130px;
@@ -110,7 +132,7 @@
 #create-task-row{
     height: 100px;
     width: 100%;
-    background-color: rgb(255, 195, 84);
+    background-color: var(--task-row-color);
 
     display: flex;
     justify-content: center;

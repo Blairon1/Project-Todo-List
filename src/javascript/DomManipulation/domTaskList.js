@@ -19,6 +19,7 @@ const $closeEditTaskDialog = document.querySelector('#close-edit-task-icon');
 const $createEditTaskDialog = document.querySelector('#edit-task-modal');
 const $createEditTaskForm = document.querySelector('#edit-task-form');
 const $deleteTaskBtn = document.querySelector('#delete-edit-task-btn');
+const $statusTaskBtn = document.querySelector('#complete-edit-task-btn');
 
 
 // ============================================================
@@ -28,6 +29,7 @@ const $deleteTaskBtn = document.querySelector('#delete-edit-task-btn');
 let currentJSProject = null;
 let $currentSelectedProjectTab = null;
 let currentJSTaskSelected= null;
+let $currentSelectedTaskTab = null;
 
 
 // ============================================================
@@ -98,7 +100,8 @@ $createTaskForm.addEventListener('submit', (event)=>{
     currentJSProject.createTask
         (   $createTaskForm.elements.taskD.value,
             $createTaskForm.elements.taskP.value,
-            $createTaskForm.elements.taskDue.value
+            $createTaskForm.elements.taskDue.value,
+            false
         );
     $createTaskDialog.close();
     $createTaskForm.reset(); 
@@ -123,23 +126,24 @@ $closeTaskDialog.addEventListener('click', ()=>{
 // Event Delegation, add an event to any nearest element of the projects container
 $homePage.addEventListener('click', (event) => {
     event.preventDefault();
-    const $clickedRow = event.target.closest('#new-row-wrapper');
+    $currentSelectedTaskTab = event.target.closest('.new-row-wrapper');
 
     // If a project tab isn't clicked, ignore it
-    if (!$clickedRow) return;
+    if (!$currentSelectedTaskTab) return;
 
     for(let i = 0; i < currentJSProject.taskList.length; i++){
-        if(currentJSProject.taskList[i].taskID == $clickedRow.dataset.ID){
+        if(currentJSProject.taskList[i].taskID == $currentSelectedTaskTab.dataset.ID){
             currentJSTaskSelected = currentJSProject.taskList[i];
         }
     }
 
-    $createEditTaskDialog.showModal();
+    if(currentJSTaskSelected.taskStatus == false){
+        $createEditTaskDialog.showModal();
 
-    $createEditTaskForm.elements.editDescription.value = currentJSTaskSelected.taskDescription;
-    $createEditTaskForm.elements.editPrority.value = currentJSTaskSelected.taskPriority;
-    $createEditTaskForm.elements.editDueDate.value = currentJSTaskSelected.taskDueDate;
-
+        $createEditTaskForm.elements.editDescription.value = currentJSTaskSelected.taskDescription;
+        $createEditTaskForm.elements.editPrority.value = currentJSTaskSelected.taskPriority;
+        $createEditTaskForm.elements.editDueDate.value = currentJSTaskSelected.taskDueDate;
+    }
 });
 
 $createEditTaskForm.addEventListener('submit', (event)=>{
@@ -152,8 +156,7 @@ $createEditTaskForm.addEventListener('submit', (event)=>{
     $createEditTaskDialog.close();
     $createEditTaskForm.reset();
 
-    const projectFromLocalStorage = getProjectFromLocalStorage(currentJSProject.ID);
-    renderProjectPage(projectFromLocalStorage, $currentSelectedProjectTab);
+    renderProjectPage(getProjectFromLocalStorage(currentJSProject.ID), $currentSelectedProjectTab);
 });
 
 
@@ -166,8 +169,6 @@ $closeEditTaskDialog.addEventListener('click', ()=>{
 // DELETE TASK BUTTON
 // ============================================================
 $deleteTaskBtn.addEventListener('click', ()=>{
-    console.log(currentJSTaskSelected);
-    console.log(currentJSTaskSelected.taskID);
     currentJSProject.deleteTask(currentJSTaskSelected.taskID);
     console.log(currentJSProject.taskList);
 
@@ -181,7 +182,13 @@ $deleteTaskBtn.addEventListener('click', ()=>{
 // ============================================================
 // COMPLETE TASK BUTTON
 // ============================================================
+$statusTaskBtn.addEventListener('click', ()=>{
+    currentJSTaskSelected.completeTask();
+    $currentSelectedTaskTab.classList.add("completed");
+    $createEditTaskDialog.close();
 
+    renderProjectPage(getProjectFromLocalStorage(currentJSProject.ID), $currentSelectedProjectTab);
+});
 
 
 /*
@@ -227,12 +234,6 @@ function buildProjectListHeader(currentJSProject, currentSelectedProjectHTML){
     const $todoListRowHeader = document.createElement('div');
     $todoListRowHeader.classList.add("todo-list-row-header");
     $todoListChart.appendChild($todoListRowHeader);
-
-    // Create the column for the task numbers
-    // const $taskNumberHeader = document.createElement('div');
-    // $taskNumberHeader.id = "task-number-header";
-    // $taskNumberHeader.textContent = "#";
-    // $todoListRowHeader.appendChild($taskNumberHeader);
 
     // Create the column for the task descriptions
     const $taskDescriptionHeader = document.createElement('div');
@@ -306,17 +307,9 @@ function buildProjectListTasks(currentHTMLProject, taskRowContainer, currentProj
         for(const task of currentProjectJS.taskList){
 
             const newlyCreatedRow = document.createElement('div');
-            newlyCreatedRow.id = "new-row-wrapper";
+            newlyCreatedRow.classList.add("new-row-wrapper");
             newlyCreatedRow.dataset.ID = task.taskID;
 
-
-            // Create task number column, add styling and add to the task-row container
-            // const $taskNumber = document.createElement('div');
-            // $taskNumber.id = "task-number" 
-            // $taskNumber.classList.add('task');
-            // $taskNumber.textContent = task.taskNumber;
-            // $taskNumber.dataset.ID = task.ID;
-            // newlyCreatedRow.appendChild($taskNumber);
 
             // Create task description column, add styling and add to the task-row container
             const $taskDescription = document.createElement('div');
@@ -333,16 +326,6 @@ function buildProjectListTasks(currentHTMLProject, taskRowContainer, currentProj
 
             const $taskStatusBtn = document.createElement('div');
             $taskStatusBtn.id = "task-status-btn";
-
-
-            if(task.taskStatus == "true"){
-                //taskRowContainer.style.backgroundColor = "#1eff16";
-                $taskStatusBtn.textContent = "Completed!";
-            }else{
-                //taskRowContainer.style.backgroundColor = "#ffc354";
-                $taskStatusBtn.textContent = "Not Completed!";
-            }
-
             $taskStatus.appendChild($taskStatusBtn);
             newlyCreatedRow.appendChild($taskStatus);
 
@@ -354,6 +337,15 @@ function buildProjectListTasks(currentHTMLProject, taskRowContainer, currentProj
             $taskPriority.dataset.ID = task.ID;
             newlyCreatedRow.appendChild($taskPriority);
 
+            if(task.taskPriority == "Low"){
+                $taskPriority.style.color = "yellow";
+            }else if(task.taskPriority == "Medium"){
+                $taskPriority.style.color = "orange";
+            }else{
+                $taskPriority.style.color = "red";
+            }
+
+
             // Create task priority column, add styling and add to the task-row container
             const $taskDate = document.createElement('div');
             $taskDate.id = "task-date";
@@ -361,6 +353,19 @@ function buildProjectListTasks(currentHTMLProject, taskRowContainer, currentProj
             $taskDate.textContent = task.taskDueDate;
             $taskDate.dataset.ID = task.ID;
             newlyCreatedRow.appendChild($taskDate);
+
+
+            if(task.taskStatus == true){
+                $taskStatusBtn.textContent = "Completed!";
+                $taskDescription.classList.replace("task", "task-completed");
+                $taskStatus.classList.replace("task", "task-completed");
+                $taskStatusBtn.style.backgroundColor = "#2a721c"; $taskStatusBtn.style.fontSize = "1.5rem"; $taskStatusBtn.style.fontWeight = "bold";
+    
+                $taskPriority.classList.replace("task", "task-completed");
+                $taskDate.classList.replace("task", "task-completed");
+            }else{
+                $taskStatusBtn.textContent = "Not Completed!";
+            }
 
 
             // Wrapper div used for row selection

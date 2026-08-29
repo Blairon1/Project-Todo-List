@@ -109,7 +109,7 @@ $projectsTab.addEventListener('click', (event) => {
 function buildProjectSidebar(){
     const allProjectsSavedLS = getAllProjectsFromLocalStorage();
     
-    if(allProjectsSavedLS!= null){
+    if(allProjectsSavedLS != null){
         for(let projectIndex = 0; projectIndex < allProjectsSavedLS.length; projectIndex++){
             // Create Project object with description and empty task list
             const newProject = new Project(allProjectsSavedLS[projectIndex].name, []);
@@ -121,6 +121,7 @@ function buildProjectSidebar(){
                       allProjectsSavedLS[projectIndex].taskList[taskIndex].taskDescription // Creating a new task ensures methods are preserved after JSON parsing
                     , allProjectsSavedLS[projectIndex].taskList[taskIndex].taskPriority
                     , allProjectsSavedLS[projectIndex].taskList[taskIndex].taskDueDate
+                    , allProjectsSavedLS[projectIndex].taskList[taskIndex].taskStatus
                     );
                 newProject.taskList[taskIndex].taskID = allProjectsSavedLS[projectIndex].taskList[taskIndex].taskID; // Maintain the same ID
             }

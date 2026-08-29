@@ -2,12 +2,12 @@ import { format, compareAsc } from "date-fns"
 import allProjects  from "./projectCollection.js";
 
 export default class Task{
-    constructor(taskNumber, taskDescription, taskPriority, taskDueDate){
+    constructor(taskNumber, taskDescription, taskPriority, taskDueDate, taskStatus){
         this.taskNumber = taskNumber;
         this.taskDescription = taskDescription;
         this.taskPriority = taskPriority;
         this.taskDueDate = taskDueDate;
-        this.taskStatus = false;
+        this.taskStatus = taskStatus;
         this.taskID = crypto.randomUUID();
     }
 
