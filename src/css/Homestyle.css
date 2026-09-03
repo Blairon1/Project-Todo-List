@@ -77,9 +77,6 @@ img{
     filter: invert(57%) sepia(41%) saturate(7076%) hue-rotate(87deg) brightness(98%) contrast(106%);
 }
 
-#filter-icon{
-    filter: invert(84%) sepia(34%) saturate(3798%) hue-rotate(341deg) brightness(100%) contrast(94%);
-}
 
 #completed-icon{
     filter: invert(57%) sepia(41%) saturate(7076%) hue-rotate(87deg) brightness(98%) contrast(106%);
@@ -143,10 +140,6 @@ img{
     background-color: var(--sidebar-background-color-darken);
 }
 
-.new-project-container.selected{
-    background-color: var(--sidebar-background-color-darken);
-}
-
 .new-projects{
     font-weight: 700;
     font-size: 1.2rem;
@@ -169,9 +162,11 @@ img{
 /* Home Page Styling */
 
 #home-page{
+    min-width: 0;
     flex-grow: 1;
-    display: grid;
-    grid-template-rows: auto auto 1fr;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
 }
 
 option:disabled {
@@ -182,10 +177,12 @@ option:disabled {
 
 
 #calendar-container{
+    flex-grow: 0;
+    flex-shrink: 1;
     display: grid;
     grid-template-rows: auto 1fr;
     justify-content: center;
-    margin: 0px, auto;
+    margin: 0px auto;
 }
 
 #calendar-header{
@@ -199,7 +196,8 @@ option:disabled {
 }
 
 #calendar {
-    width: 1200px;
+    width: min(1200px, 100%);
+    min-width: 700px;
     height: 700px;
 
     display: grid;

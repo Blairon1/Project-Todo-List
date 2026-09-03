@@ -18,10 +18,6 @@
                     <img src="assets/icons/calendar-today.svg" alt="Today Icon" class="sidebar-icons" id="today-icon">
                     <p>Today</p>
                 </div>
-                <div id="filters-tab" class="sidebar-tabs">
-                    <img src="assets/icons/view-grid-outline.svg" alt="Filters & Labels Icon" class="sidebar-icons" id="filter-icon">
-                    <p>Filters & Labels</p>
-                </div>
                 <div id="completed-tab" class="sidebar-tabs">
                     <img src="assets/icons/checkbox-multiple-marked-circle.svg" alt="Completed Icon" class="sidebar-icons" id="completed-icon">
                     <p>Completed</p>
@@ -60,6 +56,18 @@
         </dialog>
 
         <dialog id="task-container-modal">
+            <h1>Project Name</h1>
+            <form action="" method="POST" id="create-project-form">
+                <div>
+                    <label for="taskFilter">Prority
+                    <br><select id="taskFilter" name="taskFilter">
+                        <option value="Default">High</option>
+                        <option value="Date">Medium</option>
+                        <option value="Prority">Low</option>
+                    </select>
+                    </label><br>
+                </div>
+            </form>
             <div id="todo-list-chart">
                 <div class="todo-list-row-header">
                     <div id="task-number-header">#</div>
@@ -124,8 +132,8 @@
                     <textarea name="editDescription" id="editDescription" rows="5" cols="30"></textarea>
                 </div>
                 <div class="edit-task-input-containers">
-                    <label for="editPrority">Priority</label>
-                        <select id="editPrority" name="editPrority">
+                    <label for="editPriority">Priority</label>
+                        <select id="editPriority" name="editPriority">
                             <option value="High">High</option>
                             <option value="Medium">Medium</option>
                             <option value="Low">Low</option>

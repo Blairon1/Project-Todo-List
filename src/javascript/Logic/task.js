@@ -1,4 +1,4 @@
-import { format, compareAsc } from "date-fns"
+import { format, compareAsc, addDays, parseISO } from "date-fns"
 import allProjects  from "./projectCollection.js";
 
 export default class Task{
@@ -6,7 +6,7 @@ export default class Task{
         this.taskNumber = taskNumber;
         this.taskDescription = taskDescription;
         this.taskPriority = taskPriority;
-        this.taskDueDate = taskDueDate;
+        this.taskDueDate = format(parseISO(taskDueDate), 'yyyy-MM-dd');
         this.taskStatus = taskStatus;
         this.taskID = crypto.randomUUID();
     }

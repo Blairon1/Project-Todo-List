@@ -1,11 +1,5 @@
 function projectCollection(){
     let projects = [];
-    let projectsByDate = [];
-    let projectsByPrority = [
-        [],
-        [],
-        [],
-    ];
     let projectsCompleted = [];
 
     function addProject(project){

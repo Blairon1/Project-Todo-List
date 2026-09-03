@@ -92,14 +92,11 @@ function loadCalendarPage() {
     
     //Create an option for every month.
     months.forEach((month) => {
-        const $option =
-            document.createElement('option');
+        const $option = document.createElement('option');
 
         $option.value = month;
 
-        $option.textContent =
-            month.charAt(0).toUpperCase() +
-            month.slice(1);
+        $option.textContent = month.charAt(0).toUpperCase() +month.slice(1);
 
         $calendarDropbox.appendChild($option); // Convert first letter to uppercase and add to the calendar dropbox
     });

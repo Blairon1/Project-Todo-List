@@ -1,5 +1,5 @@
 import Task from "./task.js"
-import { format, compareAsc } from "date-fns";
+import { format, compareAsc, getTime, compareDesc} from "date-fns";
 import allProjects from "./projectCollection.js";
 
 export default class Project {
@@ -10,13 +10,24 @@ export default class Project {
         this.name = name;
         this.taskList = taskList;
         this.ID = crypto.randomUUID();
+
+        this.taskListDueDates = [];
+        this.taskListPriority = [];
+    }
+
+    updateTaskLists(){
+        this.taskListDueDates = [...this.taskList].sort((taskOne, taskTwo) =>compareAsc(taskOne.taskDueDate, taskTwo.taskDueDate));
+        this.taskListPriority = [...this.taskList.filter(task=>{return task.taskPriority == "High"}), ...this.taskList.filter(task=>{return task.taskPriority == "Medium"}), ...this.taskList.filter(task=>{return task.taskPriority == "Low"})];
+        localStorage.setItem("allProjects", JSON.stringify(allProjects.projects));
     }
 
     createTask(taskDescription, taskPriority, taskDueDate, taskStatus){
         const task = new Task(Project.currentTaskNumber, taskDescription, taskPriority, taskDueDate, taskStatus);
+        
         this.taskList.push(task);
-        Project.currentTaskNumber++;
 
+        this.updateTaskLists();
+        Project.currentTaskNumber++;
         localStorage.setItem("allProjects", JSON.stringify(allProjects.projects));
     }
 
@@ -28,8 +39,8 @@ export default class Project {
                 console.table(this.taskList);
             }
         }
+        this.updateTaskLists();
 
         localStorage.setItem("allProjects", JSON.stringify(allProjects.projects));
     }
-    
 };

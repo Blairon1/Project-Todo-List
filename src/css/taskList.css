@@ -1,9 +1,3 @@
-/*
- * ============================================================
- * TASK ROW HEADER ROW STYLING
- * ============================================================
- */
-
  :root{
     --task-row-color: #ffc354;
     --hover-task: #72541c;
@@ -11,6 +5,32 @@
     --todo-list-lining: rgba(0,0,0,1);
     --create-task-btn-color: rgba(0, 0, 128, 1);
  }
+
+
+/*
+ * ============================================================
+ * PROJECT NAME + DROPBOX
+ * ============================================================
+ */
+
+ #project-header{
+    margin: 0 auto;
+ }
+
+ #task-filter-form{
+    display: flex;
+    gap: 1.3rem;
+ }
+
+
+
+
+/*
+ * ============================================================
+ * TASK ROW HEADER ROW STYLING
+ * ============================================================
+ */
+
 
 #task-container-modal{
     height: 600px;
@@ -96,6 +116,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    font-size: 1.4rem;
 }
 
 #task-description{
@@ -234,7 +255,7 @@ input[type="date"]{
 
 }
 
-#editPrority{
+#editPriority{
 
 }
 
