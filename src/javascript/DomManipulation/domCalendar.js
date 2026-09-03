@@ -377,7 +377,7 @@ function renderCalendar($calendar, monthSelected) {
                 console.log("Unknown date");
         }
 
-        const hasTask = allProjects.projects.some(project => project.taskList.some(task => task.taskDueDate == $calendarDay.dataset.date));
+        const hasTask = allProjects.projects.some(project => project.taskList.some(task => (task.taskDueDate == $calendarDay.dataset.date && task.taskStatus == false)));
 
         if (hasTask) {
             $calendarDay.style.backgroundColor = "yellow";
