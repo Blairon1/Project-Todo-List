@@ -78,9 +78,6 @@ img{
 }
 
 
-#completed-icon{
-    filter: invert(57%) sepia(41%) saturate(7076%) hue-rotate(87deg) brightness(98%) contrast(106%);
-}
 
 .sidebar-tabs{
     display: flex;

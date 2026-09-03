@@ -1,6 +1,5 @@
 function projectCollection(){
     let projects = [];
-    let projectsCompleted = [];
 
     function addProject(project){
         projects.push(project);

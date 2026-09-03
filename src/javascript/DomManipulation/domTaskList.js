@@ -249,7 +249,9 @@ function buildProjectPageHeader(currentJSProject, currentSelectedProjectHTML){
 
 
 function renderProjectPage(currentJSProject, currentSelectedProjectHTML, taskListDropbox){
-    document.querySelector('#todo-list-chart').remove();
+    if(document.querySelector('#todo-list-chart') != null){
+        document.querySelector('#todo-list-chart').remove();
+    }
     buildProjectListHeader(currentJSProject, currentSelectedProjectHTML,taskListDropbox);
 }
 

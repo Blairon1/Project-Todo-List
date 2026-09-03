@@ -1,3 +1,4 @@
+import allProjects from "../Logic/projectCollection.js";
 /*
  * ============================================================
  * CALENDAR PAGE
@@ -93,11 +94,8 @@ function loadCalendarPage() {
     //Create an option for every month.
     months.forEach((month) => {
         const $option = document.createElement('option');
-
         $option.value = month;
-
         $option.textContent = month.charAt(0).toUpperCase() +month.slice(1);
-
         $calendarDropbox.appendChild($option); // Convert first letter to uppercase and add to the calendar dropbox
     });
 
@@ -261,11 +259,8 @@ function renderCalendar($calendar, monthSelected) {
      */
     for (let i = 1; i <= 35; i++) {
 
-        const $calendarDay =
-            document.createElement('div');
-
+        const $calendarDay = document.createElement('div');
         $calendarDay.classList.add('calendarDay');
-
 
         // Current month days
         if (i <= numberOfDays) {
@@ -278,8 +273,119 @@ function renderCalendar($calendar, monthSelected) {
             $calendarDay.classList.add('next-month-day');
         }
 
+        function formatCalendarDate(year, month, day) {
+            return `${year}-${month}-${String(day).padStart(2, "0")}`;
+        }
+        switch (monthSelected) {
+            case "january":
+                if (i <= numberOfDays) {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "01", i);
+                }
+                else {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "02", i);
+                }
+                break;
+            case "february":
+                if (i <= numberOfDays) {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "02", i);
+                }
+                else {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "03", i);
+                }
+                break;
+            case "march":
+                if (i <= numberOfDays) {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "03", i);
+                }
+                else {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "04", i);
+                }
+                break;
+            case "april":
+                if (i <= numberOfDays) {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "04", i);
+                }
+                else {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "05", i);
+                }
+                break;
+            case "may":
+                if (i <= numberOfDays) {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "05", i);
+                }
+                else {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "06", i);
+                }
+                break;
+            case "june":
+                if (i <= numberOfDays) {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "06", i);
+                }
+                else {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "07", i);
+                }
+                break;
+            case "july":
+                if (i <= numberOfDays) {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "07", i);
+                }
+                else {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "08", i);
+                }
+                break;
+            case "august":
+                if (i <= numberOfDays) {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "08", i);
+                }
+                else {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "09", i);
+                }
+                break;
+            case "september":
+                if (i <= numberOfDays) {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "09", i);
+                }
+                else {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "10", i);
+                }
+                break;
+            case "october":
+                if (i <= numberOfDays) {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "10", i);
+                }
+                else {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "11", i);
+                }
+                break;
+            case "november":
+                if (i <= numberOfDays) {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "11", i);
+                }
+                else {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "12", i);
+                }
+                break;
+            case "december":
+                if (i <= numberOfDays) {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "12", i);
+                }
+                else {
+                    $calendarDay.dataset.date = formatCalendarDate(2026, "01", i);
+                }
+                break;
+            default:
+                console.log("Unknown date");
+        }
+
+        const hasTask = allProjects.projects.some(project => project.taskList.some(task => task.taskDueDate == $calendarDay.dataset.date));
+
+        if (hasTask) {
+            $calendarDay.style.backgroundColor = "yellow";
+        }
+        console.log($calendarDay.dataset.date);
         $calendar.appendChild($calendarDay);
     }
+    console.log(allProjects.projects);
 }
 
 
