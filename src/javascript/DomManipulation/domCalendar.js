@@ -382,10 +382,8 @@ function renderCalendar($calendar, monthSelected) {
         if (hasTask) {
             $calendarDay.style.backgroundColor = "yellow";
         }
-        console.log($calendarDay.dataset.date);
         $calendar.appendChild($calendarDay);
     }
-    console.log(allProjects.projects);
 }
 
 

@@ -358,7 +358,7 @@ function buildProjectListHeader(currentJSProject, currentSelectedProjectHTML, ta
 
 
 
-function buildProjectListTasks(currentHTMLProject, taskRowContainer, currentProjectJS, todoList, taskListDropbox){
+export function buildProjectListTasks(currentHTMLProject, taskRowContainer, currentProjectJS, todoList, taskListDropbox){
     
     if(currentProjectJS.taskList.length > 0){
         let renderedTaskList;
