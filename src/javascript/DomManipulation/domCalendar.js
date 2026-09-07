@@ -3,10 +3,7 @@ import allProjects from "../Logic/projectCollection.js";
  * ============================================================
  * CALENDAR PAGE
  * ============================================================
- *
  */
-
-
 
 /*
  * ============================================================
@@ -15,11 +12,10 @@ import allProjects from "../Logic/projectCollection.js";
  */
 
 // Container where the currently selected page will be displayed.
-const $homePage = document.querySelector('#home-page');
+const homePage = document.querySelector('#home-page');
 
 // Calendar tab in the sidebar.
-const $calendarTab = document.querySelector('#calendar-tab');
-
+const calendarTab = document.querySelector('#calendar-tab');
 
 /*
  * ============================================================
@@ -29,20 +25,21 @@ const $calendarTab = document.querySelector('#calendar-tab');
 
 // Month names used by the month dropdown.
 const months = [
-    'january',
-    'february',
-    'march',
-    'april',
-    'may',
-    'june',
-    'july',
-    'august',
-    'september',
-    'october',
-    'november',
-    'december'
+    'january', 'february', 'march', 'april', 'may', 'june',
+    'july', 'august', 'september', 'october', 'november', 'december',
 ];
 
+const monthNumbers = {
+    january: '01', february: '02', march: '03', april: '04',
+    may: '05', june: '06', july: '07', august: '08',
+    september: '09', october: '10', november: '11', december: '12',
+};
+
+const daysInMonth = {
+    january: 31, february: 28, march: 31, april: 30,
+    may: 31, june: 30, july: 31, august: 31,
+    september: 30, october: 31, november: 30, december: 31,
+};
 
 /*
  * ============================================================
@@ -51,14 +48,11 @@ const months = [
  */
 
 /**
-    To load the calendar page on the home screen
+ * To load the calendar page on the home screen
  */
 function loadCalendarPage() {
-
-    
-    //Remove whatever page is currently inside #home-page
-    $homePage.replaceChildren();
-
+    // Remove whatever page is currently inside #home-page
+    homePage.replaceChildren();
 
     /*
      * ========================================================
@@ -66,50 +60,38 @@ function loadCalendarPage() {
      * ========================================================
      */
 
-    const $calendarMonthContainer = document.createElement('div');
-
-    $calendarMonthContainer.id = 'calendar-month-container';
+    const monthContainer = document.createElement('div');
+    monthContainer.id = 'calendar-month-container';
 
     // Create the month selection form.
-    const $monthForm = document.createElement('form');
-
-    $monthForm.action = '';
-    $monthForm.method = 'POST';
-
+    const monthForm = document.createElement('form');
+    monthForm.action = '';
+    monthForm.method = 'POST';
 
     // Create the label for the dropdown.
-    const $monthLabel = document.createElement('label');
-
-    $monthLabel.htmlFor = 'months';
-    $monthLabel.textContent = 'Please select a month:';
+    const monthLabel = document.createElement('label');
+    monthLabel.htmlFor = 'months';
+    monthLabel.textContent = 'Please select a month:';
 
     // Create the month dropdown.
-    const $calendarDropbox = document.createElement('select');
+    const monthDropdown = document.createElement('select');
+    monthDropdown.name = 'months';
+    monthDropdown.id = 'months';
 
-    $calendarDropbox.name = 'months';
-    $calendarDropbox.id = 'months';
-
-
-    
-    //Create an option for every month.
+    // Create an option for every month.
     months.forEach((month) => {
-        const $option = document.createElement('option');
-        $option.value = month;
-        $option.textContent = month.charAt(0).toUpperCase() +month.slice(1);
-        $calendarDropbox.appendChild($option); // Convert first letter to uppercase and add to the calendar dropbox
+        const option = document.createElement('option');
+        option.value = month;
+        option.textContent = month.charAt(0).toUpperCase() + month.slice(1);
+        monthDropdown.appendChild(option); // Convert first letter to uppercase and add to the calendar dropdown
     });
 
-
     // Default value is january
-    $calendarDropbox.value = 'january';
+    monthDropdown.value = 'january';
 
-
-    // Month label and dropbox to the form
-    $monthForm.appendChild($monthLabel);
-    $monthForm.appendChild($calendarDropbox);
-
-    $calendarMonthContainer.appendChild($monthForm);
-
+    // Month label and dropdown to the form
+    monthForm.append(monthLabel, monthDropdown);
+    monthContainer.appendChild(monthForm);
 
     /*
      * ========================================================
@@ -117,9 +99,8 @@ function loadCalendarPage() {
      * ========================================================
      */
 
-    const $calendarContainer = document.createElement('div');
-
-    $calendarContainer.id = 'calendar-container';
+    const calendarContainer = document.createElement('div');
+    calendarContainer.id = 'calendar-container';
 
     /*
      * ========================================================
@@ -127,36 +108,19 @@ function loadCalendarPage() {
      * ========================================================
      */
 
-    const $calendarHeader =
-        document.createElement('div');
-
-    $calendarHeader.id =
-        'calendar-header';
-
+    const calendarHeader = document.createElement('div');
+    calendarHeader.id = 'calendar-header';
 
     // Names of the seven days displayed above the calendar.
-    const daysOfWeek = [
-        'Sun',
-        'Mon',
-        'Tue',
-        'Wed',
-        'Thu',
-        'Fri',
-        'Sat'
-    ];
+    const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-
-    
     // Create the seven weekday labels.
     daysOfWeek.forEach((day) => {
-
-        const $day = document.createElement('p');
-
-        $day.classList.add('calendar-days');
-        $day.textContent = day;
-        $calendarHeader.appendChild($day);
+        const dayLabel = document.createElement('p');
+        dayLabel.classList.add('calendar-days');
+        dayLabel.textContent = day;
+        calendarHeader.appendChild(dayLabel);
     });
-
 
     /*
      * ========================================================
@@ -164,9 +128,8 @@ function loadCalendarPage() {
      * ========================================================
      */
 
-    const $calendar = document.createElement('div');
-    $calendar.id = 'calendar';
-
+    const calendar = document.createElement('div');
+    calendar.id = 'calendar';
 
     /*
      * ========================================================
@@ -174,12 +137,8 @@ function loadCalendarPage() {
      * ========================================================
      */
 
-    $calendarContainer.appendChild($calendarHeader);
-    $calendarContainer.appendChild($calendar);
-
-    $homePage.appendChild($calendarMonthContainer);
-    $homePage.appendChild($calendarContainer);
-
+    calendarContainer.append(calendarHeader, calendar);
+    homePage.append(monthContainer, calendarContainer);
 
     /*
      * ========================================================
@@ -189,8 +148,7 @@ function loadCalendarPage() {
      * Render January immediately after the Calendar page
      * has been created.
      */
-    renderCalendar($calendar,$calendarDropbox.value);
-
+    renderCalendar(calendar, monthDropdown.value);
 
     /*
      * ========================================================
@@ -200,11 +158,10 @@ function loadCalendarPage() {
      * When the user selects another month, only the calendar
      * grid is regenerated.
      */
-    $calendarDropbox.addEventListener('change', (event) => {
-        renderCalendar($calendar, event.target.value);
+    monthDropdown.addEventListener('change', (event) => {
+        renderCalendar(calendar, event.target.value);
     });
 }
-
 
 /*
  * ============================================================
@@ -215,201 +172,67 @@ function loadCalendarPage() {
 /**
  * Generates the calendar days for the selected month.
  *
- * @param {HTMLElement} $calendar
+ * @param {HTMLElement} calendar
  * The calendar container to populate.
  *
- * @param {string} monthSelected
+ * @param {string} selectedMonth
  * The month selected by the user.
  */
-function renderCalendar($calendar, monthSelected) {
-
+function renderCalendar(calendar, selectedMonth) {
     // Remove the previous calendar days.
-    $calendar.replaceChildren();
-    
+    calendar.replaceChildren();
+
     // Determine how many days the selected month contains.
-    let numberOfDays;
-
-    if (
-        monthSelected === 'january' ||
-        monthSelected === 'march' ||
-        monthSelected === 'may' ||
-        monthSelected === 'july' ||
-        monthSelected === 'august' ||
-        monthSelected === 'october' ||
-        monthSelected === 'december'
-    ) {
-        numberOfDays = 31;
-    } else if (
-        monthSelected === 'april' ||
-        monthSelected === 'june' ||
-        monthSelected === 'september' ||
-        monthSelected === 'november'
-    ) {
-        numberOfDays = 30;
-    } else {
-        // The exeception for February
-        numberOfDays = 28;
-    }
-
+    const numberOfDays = daysInMonth[selectedMonth];
+    const monthIndex = months.indexOf(selectedMonth);
+    const nextMonth = months[(monthIndex + 1) % months.length];
+    const nextMonthYear = selectedMonth === 'december' ? 2027 : 2026;
 
     /*
      * ========================================================
      * CREATE CALENDAR DAYS
      * ========================================================
      */
-    for (let i = 1; i <= 35; i++) {
-
-        const $calendarDay = document.createElement('div');
-        $calendarDay.classList.add('calendarDay');
+    for (let dayNumber = 1; dayNumber <= 35; dayNumber++) {
+        const calendarDay = document.createElement('div');
+        calendarDay.classList.add('calendar-day');
 
         // Current month days
-        if (i <= numberOfDays) {
-            $calendarDay.textContent = i;
+        if (dayNumber <= numberOfDays) {
+            calendarDay.textContent = dayNumber;
+            calendarDay.dataset.date = formatCalendarDate(
+                2026,
+                monthNumbers[selectedMonth],
+                dayNumber
+            );
         }
         // Following month days
         else {
-            $calendarDay.textContent =
-                i - numberOfDays;
-            $calendarDay.classList.add('next-month-day');
+            const nextMonthDay = dayNumber - numberOfDays;
+            calendarDay.textContent = nextMonthDay;
+            calendarDay.classList.add('next-month-day');
+            calendarDay.dataset.date = formatCalendarDate(
+                nextMonthYear,
+                monthNumbers[nextMonth],
+                nextMonthDay
+            );
         }
 
-        function formatCalendarDate(year, month, day) {
-            return `${year}-${month}-${String(day).padStart(2, "0")}`;
-        }
-        switch (monthSelected) {
-            case "january":
-                if (i <= numberOfDays) {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "01", i);
-                }
-                else {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "02", i);
-                }
-                break;
-            case "february":
-                if (i <= numberOfDays) {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "02", i);
-                }
-                else {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "03", i);
-                }
-                break;
-            case "march":
-                if (i <= numberOfDays) {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "03", i);
-                }
-                else {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "04", i);
-                }
-                break;
-            case "april":
-                if (i <= numberOfDays) {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "04", i);
-                }
-                else {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "05", i);
-                }
-                break;
-            case "may":
-                if (i <= numberOfDays) {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "05", i);
-                }
-                else {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "06", i);
-                }
-                break;
-            case "june":
-                if (i <= numberOfDays) {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "06", i);
-                }
-                else {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "07", i);
-                }
-                break;
-            case "july":
-                if (i <= numberOfDays) {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "07", i);
-                }
-                else {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "08", i);
-                }
-                break;
-            case "august":
-                if (i <= numberOfDays) {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "08", i);
-                }
-                else {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "09", i);
-                }
-                break;
-            case "september":
-                if (i <= numberOfDays) {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "09", i);
-                }
-                else {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "10", i);
-                }
-                break;
-            case "october":
-                if (i <= numberOfDays) {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "10", i);
-                }
-                else {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "11", i);
-                }
-                break;
-            case "november":
-                if (i <= numberOfDays) {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "11", i);
-                }
-                else {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "12", i);
-                }
-                break;
-            case "december":
-                if (i <= numberOfDays) {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "12", i);
-                }
-                else {
-                    $calendarDay.dataset.date = formatCalendarDate(2026, "01", i);
-                }
-                break;
-            default:
-                console.log("Unknown date");
-        }
-
-        const hasTask = allProjects.projects.some(project => project.taskList.some(task => (task.taskDueDate == $calendarDay.dataset.date && task.taskStatus == false)));
+        const hasTask = allProjects.projects.some(project => project.taskList.some(task => (task.dueDate == calendarDay.dataset.date && task.isCompleted == false)));
 
         if (hasTask) {
-            $calendarDay.style.backgroundColor = "yellow";
+            calendarDay.style.backgroundColor = "yellow";
         }
-        $calendar.appendChild($calendarDay);
+
+        calendar.appendChild(calendarDay);
     }
 }
 
+function formatCalendarDate(year, month, day) {
+    return `${year}-${month}-${String(day).padStart(2, '0')}`;
+}
 
-/*
- * ============================================================
- * CALENDAR TAB
- * ============================================================
- */
+calendarTab.addEventListener('click', loadCalendarPage);
+loadCalendarPage();
 
-// Load the calendar page upon clicking the tab
-$calendarTab.addEventListener('click', () => {
-    loadCalendarPage();
-});
-
-
-/*
- * ============================================================
- * INITIAL PAGE LOAD
- * ============================================================
- */
-
-
-// Load the Calendar page as soon as the DOM has finished loading (the calendar acts as the home page).
-document.addEventListener('DOMContentLoaded', () => {
-    loadCalendarPage();
-});
-
-
-export {loadCalendarPage};
+export { loadCalendarPage };

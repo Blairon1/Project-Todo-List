@@ -1,37 +1,32 @@
-*{
+* {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-:root{
-    --sidebar-background-color:rgba(128, 128, 128, 0.08);
-    --sidebar-background-color-darken:rgba(128, 128, 128, 0.2);
+:root {
+    --sidebar-background-color: rgba(128, 128, 128, 0.08);
+    --sidebar-background-color-darken: rgba(128, 128, 128, 0.2);
     --white: #ffffff;
 }
 
-body{
+body {
     min-height: 100vh;
-    width: 100%; 
-    margin: 0;   
+    width: 100%;
     overflow-x: hidden; /* Prevent horizontal scrolling entirely */
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
 }
 
-img{
+img {
     max-width: 100%;
     height: auto; /* Keeps the image from getting distorted */
 }
 
 /* Shared Sidebar and Header Styling */
 
-#header{
+#header {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-grow: 1;
     width: 100%;
     height: 50px;
 
@@ -39,177 +34,168 @@ img{
     background-color: #f8552c;
 }
 
-.body-wrapper{
+.body-wrapper {
     display: grid;
-    grid-template-columns: 300px 1fr;
-
+    grid-template-columns: 300px minmax(0, 1fr);
 }
 
-.sidebar{
+.sidebar {
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
     gap: 2rem;
 
+    min-height: calc(100vh - 50px);
     padding: 1.8rem 0.8rem;
-    height: 100vh;
-
-
     background-color: var(--sidebar-background-color);
 }
 
-.siderbar-tophalf{
+.sidebar-top {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
 }
 
-.sidebar-icons{
+.sidebar-icon {
     width: 30px;
     height: 30px;
 }
 
-#calendar-icon{
+#calendar-icon {
     filter: invert(13%) sepia(96%) saturate(3888%) hue-rotate(292deg) brightness(96%) contrast(95%);
 }
 
-#today-icon{
+#today-icon {
     filter: invert(57%) sepia(41%) saturate(7076%) hue-rotate(87deg) brightness(98%) contrast(106%);
 }
 
-
-
-.sidebar-tabs{
+.sidebar-tab {
     display: flex;
     align-items: center;
     gap: 0.6rem;
 }
 
-.sidebar-tabs:hover{
+.sidebar-tab:hover {
     cursor: pointer;
     background-color: var(--sidebar-background-color-darken);
 }
 
-#project-title{
+#project-title {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    height: 30px;
     margin-bottom: 1rem;
     padding: 0.4rem;
-    height: 30px;
 }
 
-#project-title-btn{
+#project-title-btn {
     width: 225px;
 }
 
-#project-title:hover{
-    background-color: var(--sidebar-background-color-darken);
+#project-title:hover {
     cursor: pointer;
+    background-color: var(--sidebar-background-color-darken);
 }
 
-#plus-icon{
+#plus-icon {
     width: 20px;
     height: 20px;
     cursor: pointer;
 }
 
-#plus-icon:hover{
+#plus-icon:hover {
     background-color: var(--white);
     border-radius: 2.3rem;
 }
 
-#projects{
+#projects {
     display: flex;
     flex-direction: column;
     gap: 1rem;
     padding-left: 1rem;
 }
 
-.new-project-container{
+.project-item {
     display: flex;
     justify-content: space-between;
-    height: 50px;
+    align-items: center;
+    min-height: 50px;
     padding: 1rem;
 }
 
-.new-project-container:hover{
+.project-item:hover {
     cursor: pointer;
     background-color: var(--sidebar-background-color-darken);
 }
 
-.new-projects{
-    font-weight: 700;
-    font-size: 1.2rem;
+.project-name {
     width: 100%;
-    height: 100%;
+    font-size: 1.2rem;
+    font-weight: 700;
 }
 
-#project-delete-icon{
+.project-delete-icon {
     width: 20px;
     height: 20px;
     cursor: pointer;
 }
 
-#project-delete-icon:hover{
+.project-delete-icon:hover {
     border-radius: 2rem;
     background-color: #797979;
 }
 
-
 /* Home Page Styling */
 
-#home-page{
-    min-width: 0;
-    flex-grow: 1;
+#home-page {
     display: flex;
     flex-direction: column;
+    min-width: 0;
     padding: 1rem;
 }
 
 option:disabled {
-  color: #999999;
-  background-color: #eeeeee;
-  font-style: italic;
+    color: #999999;
+    background-color: #eeeeee;
+    font-style: italic;
 }
 
+#calendar-month-container {
+    margin-bottom: 1rem;
+}
 
-#calendar-container{
-    flex-grow: 0;
-    flex-shrink: 1;
+#calendar-container {
     display: grid;
     grid-template-rows: auto 1fr;
     justify-content: center;
-    margin: 0px auto;
 }
 
-#calendar-header{
-    display: flex; 
+#calendar-header {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
 }
 
-.calendar-days{
-    padding-left: 4rem;
-    margin-right: 5rem;   
-    color: var(--white);
+.calendar-days {
+    padding: 0.7rem;
+    text-align: center;
+    color: #000000;
 }
 
 #calendar {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
     width: min(1200px, 100%);
     min-width: 700px;
     height: 700px;
-
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-
     gap: 2px;
     padding: 2px;
-
     background-color: #000000;
 }
 
-.calendarDay {
+.calendar-day {
     min-width: 0;
     padding: 0.7rem;
-
     background-color: var(--white);
 }
 
@@ -217,50 +203,52 @@ option:disabled {
     opacity: 0.7;
 }
 
-#welcome-caption{
+#welcome-caption {
     font-size: 3.5rem;
     font-weight: bold;
 }
 
-#project-modal{
+#project-modal {
     width: 600px;
     height: 350px;
     padding: 2rem;
     margin: auto;
 }
 
-#project-modal p{
+#project-modal p {
+    margin-right: auto;
+    color: #f8552c;
     font-size: 3.5rem;
     font-weight: 600;
-    color: #f8552c;
-    margin-right: auto;
 }
 
-#create-project-form{
+#create-project-form {
     display: flex;
     flex-direction: column;
     gap: 2rem;
 }
 
-#create-project-header{
+#create-project-header {
     display: flex;
     align-items: center;
     gap: 1rem;
 }
 
-#close-icon{
+#close-icon,
+#folder-icon {
     width: 50px;
     height: 50px;
+}
+
+#close-icon {
     filter: invert(14%) sepia(86%) saturate(7050%) hue-rotate(1deg) brightness(104%) contrast(117%);
 }
 
-#folder-icon{
-    width: 50px;
-    height: 50px;
+#folder-icon {
     filter: invert(47%) sepia(92%) saturate(3548%) hue-rotate(344deg) brightness(100%) contrast(95%);
 }
 
-#close-icon:hover{
+#close-icon:hover {
     cursor: pointer;
     filter: invert(14%) sepia(86%) saturate(7050%) hue-rotate(1deg) brightness(54%) contrast(117%);
 }
@@ -269,24 +257,23 @@ option:disabled {
     display: flex;
 }
 
-#project-input-container input{
+#project-input-container input {
     width: 450px;
     height: 50px;
     padding: 1rem;
     font-size: 1.3rem;
 }
 
-#create-project-buttons button{
+#create-project-buttons button {
     width: 450px;
     height: 50px;
-
-    background-color: #f8552c;
     color: var(--white);
     font-size: 1.5rem;
     font-weight: bold;
+    background-color: #f8552c;
 }
 
-#create-project-buttons button:hover{
+#create-project-buttons button:hover {
     cursor: pointer;
     background-color: #8a3019;
 }

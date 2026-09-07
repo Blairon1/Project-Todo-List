@@ -1,177 +1,131 @@
 import { startOfToday, format } from 'date-fns';
 import allProjects from '../Logic/projectCollection.js';
 
-
-
 // ============================================================
 // DOM REFERENCES
 // ============================================================
-const $todayTab = document.querySelector('#today-tab');
-const $homePage = document.querySelector('#home-page');
 
-
-// ============================================================
-// STATE
-// ============================================================
-
+const todayTab = document.querySelector('#today-tab');
+const homePage = document.querySelector('#home-page');
 
 // ============================================================
 // TODAY TAB CLICK
 // ============================================================
 
 // Event Delegation, add an event to any nearest element of the projects container
-$todayTab.addEventListener('click', (event) => {
-    console.log("Clicked!");
+todayTab.addEventListener('click', () => {
     renderTodayPage();
 });
 
-
-function renderTodayPage(){
-    $homePage.replaceChildren();
+function renderTodayPage() {
+    homePage.replaceChildren();
     loadTodayPageHeader();
 }
 
-
-function loadTodayPageHeader(){
-    const $todayHeader = document.createElement('h1');
-    $todayHeader.id = "today-header";
-    $todayHeader.textContent = "Today's Tasks";
-    $homePage.appendChild($todayHeader);
+function loadTodayPageHeader() {
+    const todayHeader = document.createElement('h1');
+    todayHeader.id = 'today-header';
+    todayHeader.textContent = "Today's Tasks";
+    homePage.appendChild(todayHeader);
 
     /*
-    * ============================================================
-    *  BUILD THE HEADER FOR THE TO-DO LIST CHART
-    * ============================================================
-    */
+     * ============================================================
+     * BUILD THE HEADER FOR THE TO-DO LIST CHART
+     * ============================================================
+     */
 
     // Container for the entire todoList chart
-    const $todoListChart = document.createElement('div');
-    $todoListChart.id = "todo-list-chart";
-    $todoListChart.style.margin = "2rem"; // Add to the css file later
-    $homePage.appendChild($todoListChart);
+    const todoListChart = document.createElement('div');
+    todoListChart.id = 'todo-list-chart';
+    todoListChart.classList.add('today-task-list');
+    homePage.appendChild(todoListChart);
 
     // Container for the header for the todoList
-    const $todoListRowHeader = document.createElement('div');
-    $todoListRowHeader.classList.add("todo-list-row-header");
-    $todoListChart.appendChild($todoListRowHeader);
+    const todoListHeader = document.createElement('div');
+    todoListHeader.classList.add('todo-list-row-header');
+    todoListChart.appendChild(todoListHeader);
 
     // Create the column for the task descriptions
-    const $taskDescriptionHeader = document.createElement('div');
-    $taskDescriptionHeader.id = "task-description-header";
-    $taskDescriptionHeader.textContent = "Description";
-    $todoListRowHeader.appendChild($taskDescriptionHeader);
+    const descriptionHeader = document.createElement('div');
+    descriptionHeader.textContent = 'Description';
+    todoListHeader.appendChild(descriptionHeader);
 
     // Create the column for the task status
-    const $taskStatusHeader = document.createElement('div');
-    $taskStatusHeader.id = "task-status-header";
-    $taskStatusHeader.textContent = "Status";
-    $todoListRowHeader.appendChild($taskStatusHeader);
+    const statusHeader = document.createElement('div');
+    statusHeader.textContent = 'Status';
+    todoListHeader.appendChild(statusHeader);
 
     // Create the column for the task priority
-    const $taskPriorityHeader = document.createElement('div');
-    $taskPriorityHeader.id = "task-priority-header";
-    $taskPriorityHeader.textContent = "Priority";
-    $todoListRowHeader.appendChild($taskPriorityHeader);
+    const priorityHeader = document.createElement('div');
+    priorityHeader.textContent = 'Priority';
+    todoListHeader.appendChild(priorityHeader);
 
     // Create the column for the task date
-    const $taskDateHeader = document.createElement('div');
-    $taskDateHeader.id = "task-date-header";
-    $taskDateHeader.textContent = "Due Dates";
-    $todoListRowHeader.appendChild($taskDateHeader);
+    const dueDateHeader = document.createElement('div');
+    dueDateHeader.textContent = 'Due Date';
+    todoListHeader.appendChild(dueDateHeader);
 
     /*
-    * ============================================================
-    *  CREATE THE ROWS FOR THE TO-DO LIST CHART
-    * ============================================================
-    */
+     * ============================================================
+     * CREATE THE ROWS FOR THE TO-DO LIST CHART
+     * ============================================================
+     */
 
-    const $taskRowsContainer = document.createElement('div');
-    $taskRowsContainer.id = "task-row";
+    const taskRowsContainer = document.createElement('div');
+    taskRowsContainer.classList.add('task-rows');
 
-
-
-    loadTodayRows($taskRowsContainer, $todoListChart);
+    loadTodayRows(taskRowsContainer, todoListChart);
 }
 
-function loadTodayRows(taskRowsContainer, todoListChart){
-    let renderedTaskList = [];
-    for(let projectIndex = 0; projectIndex < allProjects.projects.length; projectIndex++){
-        const todayDate = format(startOfToday(), 'yyyy-MM-dd');
-        renderedTaskList.push(...allProjects.projects[projectIndex].taskList.filter( task => task.taskDueDate == todayDate));
-        console.log(renderedTaskList);
-        console.log(allProjects.projects[projectIndex]);
-    }
-    
-    if(renderedTaskList.length > 0){
-        for(const task of renderedTaskList){
+function loadTodayRows(taskRowsContainer, todoListChart) {
+    const todayDate = format(startOfToday(), 'yyyy-MM-dd');
+    const renderedTaskList = allProjects.projects.flatMap((project) =>
+        project.taskList.filter((task) => task.dueDate === todayDate)
+    );
 
-            const newlyCreatedRow = document.createElement('div');
-            newlyCreatedRow.classList.add("new-row-wrapper");
-            newlyCreatedRow.style.pointerEvents = "none";
+    for (const task of renderedTaskList) {
+        const taskRow = document.createElement('div');
+        taskRow.classList.add('task-row', 'today-task-row');
 
+        // Create task description column, add styling and add to the task-row container
+        const taskDescription = document.createElement('div');
+        taskDescription.classList.add('task-cell', 'task-description');
+        taskDescription.textContent = task.description;
+        taskRow.appendChild(taskDescription);
 
-            // Create task description column, add styling and add to the task-row container
-            const $taskDescription = document.createElement('div');
-            $taskDescription.id = "task-description";
-            $taskDescription.classList.add('task');
-            $taskDescription.textContent = task.taskDescription;
-            newlyCreatedRow.appendChild($taskDescription);
+        // Create task status, add styling and add to the task-row container
+        const taskStatus = document.createElement('div');
+        taskStatus.classList.add('task-cell', 'task-status');
 
-            // Create task status, add styling and add to the task-row container
-            const $taskStatus = document.createElement('div');
-            $taskStatus.id = "task-status" 
-            $taskStatus.classList.add('task');
-            $taskStatus.dataset.ID = task.ID;
+        const taskStatusButton = document.createElement('div');
+        taskStatusButton.classList.add('task-status-button');
+        taskStatus.appendChild(taskStatusButton);
+        taskRow.appendChild(taskStatus);
 
-            const $taskStatusBtn = document.createElement('div');
-            $taskStatusBtn.id = "task-status-btn";
-            $taskStatus.appendChild($taskStatusBtn);
-            newlyCreatedRow.appendChild($taskStatus);
+        // Create task priority column, add styling and add to the task-row container
+        const taskPriority = document.createElement('div');
+        taskPriority.classList.add('task-cell', 'task-priority', `priority-${task.priority.toLowerCase()}`);
+        taskPriority.textContent = task.priority;
+        taskRow.appendChild(taskPriority);
 
-            // Create task priority column, add styling and add to the task-row container
-            const $taskPriority = document.createElement('div');
-            $taskPriority.id = "task-priority";
-            $taskPriority.classList.add('task');
-            $taskPriority.textContent = task.taskPriority;
-            $taskPriority.dataset.ID = task.ID;
-            newlyCreatedRow.appendChild($taskPriority);
+        // Create task date column, add styling and add to the task-row container
+        const taskDate = document.createElement('div');
+        taskDate.classList.add('task-cell', 'task-date');
+        taskDate.textContent = task.dueDate;
+        taskRow.appendChild(taskDate);
 
-            if(task.taskPriority == "Low"){
-                $taskPriority.style.color = "yellow";
-            }else if(task.taskPriority == "Medium"){
-                $taskPriority.style.color = "orange";
-            }else{
-                $taskPriority.style.color = "red";
-            }
-
-
-            // Create task priority column, add styling and add to the task-row container
-            const $taskDate = document.createElement('div');
-            $taskDate.id = "task-date";
-            $taskDate.classList.add('task');
-            $taskDate.textContent = task.taskDueDate;
-            $taskDate.dataset.ID = task.ID;
-            newlyCreatedRow.appendChild($taskDate);
-
-
-            if(task.taskStatus == true){
-                $taskStatusBtn.textContent = "Completed!";
-                $taskDescription.classList.replace("task", "task-completed");
-                $taskStatus.classList.replace("task", "task-completed");
-                $taskStatusBtn.style.backgroundColor = "#2a721c"; $taskStatusBtn.style.fontSize = "1.5rem"; $taskStatusBtn.style.fontWeight = "bold";
-
-                $taskPriority.classList.replace("task", "task-completed");
-                $taskDate.classList.replace("task", "task-completed");
-            }else{
-                $taskStatusBtn.textContent = "Not Completed!";
-            }
-
-
-            // Wrapper div used for row selection
-            taskRowsContainer.appendChild(newlyCreatedRow);
-         
+        if (task.isCompleted) {
+            taskStatusButton.textContent = 'Completed!';
+            taskStatusButton.classList.add('task-status-completed');
+            taskRow.classList.add('task-row-completed');
+        } else {
+            taskStatusButton.textContent = 'Not Completed!';
         }
-            //Append everything to the todoList chart container
-            todoListChart.appendChild(taskRowsContainer); 
+
+        // Wrapper div used for row selection
+        taskRowsContainer.appendChild(taskRow);
     }
+
+    // Append everything to the todoList chart container
+    todoListChart.appendChild(taskRowsContainer);
 }

@@ -1,26 +1,29 @@
-function projectCollection(){
-    let projects = [];
+function createProjectCollection() {
+    const projects = [];
 
-    function addProject(project){
+    function addProject(project) {
         projects.push(project);
-        localStorage.setItem("allProjects", JSON.stringify(projects));
+        localStorage.setItem('allProjects', JSON.stringify(projects));
     }
-    
-    function deleteProject(project){
-        for(let i = 0; i < projects.length; i++){
-            if(project.dataset.ID == projects[i].ID){
-                projects.splice(i, 1);
+
+    function deleteProject(projectElement) {
+        for (let projectIndex = 0; projectIndex < projects.length; projectIndex++) {
+            if (projectElement.dataset.ID === projects[projectIndex].ID) {
+                projects.splice(projectIndex, 1);
+                break;
             }
         }
-        localStorage.setItem("allProjects", JSON.stringify(projects));
+
+        localStorage.setItem('allProjects', JSON.stringify(projects));
     }
 
-    return{
+    return {
         projects,
         addProject,
         deleteProject,
     };
 }
-const allProjects = projectCollection();
+
+const allProjects = createProjectCollection();
 
 export default allProjects;

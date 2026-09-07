@@ -1,245 +1,236 @@
-import allProjects  from "../Logic/projectCollection.js";
-import {getAllProjectsFromLocalStorage, getProjectFromLocalStorage} from "../LocalStorageMethods/getProject.js";
-import Task from "../Logic/task.js";
-import Project from "../Logic/project.js";
+import allProjects from '../Logic/projectCollection.js';
+import { getProjectFromLocalStorage } from '../LocalStorageMethods/getProject.js';
 
 // ============================================================
 // DOM REFERENCES
 // ============================================================
 
-const $projects = document.querySelector('#projects');
-const $taskRow = document.querySelector('#task-row');
-const $homePage = document.querySelector('#home-page');
+const projectsContainer = document.querySelector('#projects');
+const homePage = document.querySelector('#home-page');
 
-const $closeTaskDialog = document.querySelector('#close-taskcreation');
-const $createTaskDialog = document.querySelector('#create-new-task');
-const $createTaskForm = document.querySelector('#task-form');
+const closeTaskDialogButton = document.querySelector('#close-taskcreation');
+const createTaskDialog = document.querySelector('#create-new-task');
+const createTaskForm = document.querySelector('#task-form');
 
-const $closeEditTaskDialog = document.querySelector('#close-edit-task-icon');
-const $createEditTaskDialog = document.querySelector('#edit-task-modal');
-const $createEditTaskForm = document.querySelector('#edit-task-form');
-const $deleteTaskBtn = document.querySelector('#delete-edit-task-btn');
-const $statusTaskBtn = document.querySelector('#complete-edit-task-btn');
-
+const closeEditTaskDialogButton = document.querySelector('#close-edit-task-icon');
+const editTaskDialog = document.querySelector('#edit-task-modal');
+const editTaskForm = document.querySelector('#edit-task-form');
+const deleteTaskButton = document.querySelector('#delete-edit-task-btn');
+const completeTaskButton = document.querySelector('#complete-edit-task-btn');
 
 // ============================================================
 // STATE
 // ============================================================
 
-let currentJSProject = null;
-let $currentSelectedProjectTab = null;
-let currentJSTaskSelected= null;
-let $currentSelectedTaskTab = null;
+let currentProject = null;
+let selectedProjectElement = null;
+let selectedTask = null;
+let selectedTaskElement = null;
 
-let currentTaskFilter = "Default";
-
+let currentTaskFilter = 'Default';
 
 // ============================================================
 // PROJECT CLICK
 // ============================================================
 
 // Event Delegation, add an event to any nearest element of the projects container
-$projects.addEventListener('click', (event) => {
-
-    const $clickedProject = event.target.closest('.new-projects');
-    const $allClickedProjects = $projects.querySelectorAll('.new-project-container');
+projectsContainer.addEventListener('click', (event) => {
+    const projectTab = event.target.closest('.project-name');
 
     // If a project tab isn't clicked, ignore it
-    if (!$clickedProject) return;
-
-    // Save the currently selected project (HTML)
-    $currentSelectedProjectTab = $clickedProject;
-
-    for(const project of allProjects.projects){
-        if($currentSelectedProjectTab.dataset.ID == project.ID){
-
-            // Current project selected by the user found in the local storage
-            currentJSProject = project;
-
-            // Upon clicking the project tab, build the project page's header and then render the entire home page
-            buildProjectPageHeader(getProjectFromLocalStorage(currentJSProject.ID), $currentSelectedProjectTab);
-        }
+    if (!projectTab || event.target.matches('.project-delete-icon')) {
+        return;
     }
 
+    // Save the currently selected project (HTML)
+    selectedProjectElement = projectTab;
+    currentProject = allProjects.projects.find(
+        (project) => project.id === selectedProjectElement.dataset.projectId
+    );
+
+    if (!currentProject) {
+        return;
+    }
+
+    // Upon clicking the project tab, build the project page's header and then render the entire home page
+    buildProjectPageHeader(currentProject, selectedProjectElement);
 });
-
-
 
 // ============================================================
 // CREATE TASK
 // ============================================================
 
-const $createTaskBtn = document.createElement('button');
-$createTaskBtn.id = "create-task-btn";
-$createTaskBtn.textContent = "Create New Task";
+const createTaskButton = document.createElement('button');
+createTaskButton.id = 'create-task-btn';
+createTaskButton.textContent = 'Create New Task';
 
-// Create Row for prompting users to create new tasks 
-const $createTaskRow = document.createElement('div');
-$createTaskRow.id = "create-task-row"
-$createTaskRow.appendChild($createTaskBtn);
+// Create Row for prompting users to create new tasks
+const createTaskRow = document.createElement('div');
+createTaskRow.id = 'create-task-row';
+createTaskRow.appendChild(createTaskButton);
 
 // Open the form for creating a new task
-$createTaskBtn.addEventListener('click', ()=>{
-    $createTaskDialog.showModal();
+createTaskButton.addEventListener('click', () => {
+    createTaskDialog.showModal();
 });
 
 // Submit the data from the form for creating a new task
-$createTaskForm.addEventListener('submit', (event)=>{
+createTaskForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    currentJSProject.createTask
-        (   $createTaskForm.elements.taskD.value,
-            $createTaskForm.elements.taskP.value,
-            $createTaskForm.elements.taskDue.value,
-            false
-        );
-    $createTaskDialog.close();
-    $createTaskForm.reset(); 
+    if (!currentProject) {
+        return;
+    }
 
-    renderProjectPage(getProjectFromLocalStorage(currentJSProject.ID), $currentSelectedProjectTab, currentTaskFilter);
+    currentProject.createTask(
+        createTaskForm.elements.taskD.value,
+        createTaskForm.elements.taskP.value,
+        createTaskForm.elements.taskDue.value,
+        false
+    );
+
+    createTaskDialog.close();
+    createTaskForm.reset();
+    renderProjectPage(currentProject, selectedProjectElement, currentTaskFilter);
 });
-
 
 // Close the form for creating a new task
-$closeTaskDialog.addEventListener('click', ()=>{
-    $createTaskDialog.close();
+closeTaskDialogButton.addEventListener('click', () => {
+    createTaskDialog.close();
 });
-
-
 
 // ============================================================
 // EDIT TASK PROPERTIES
 // ============================================================
 
 // Event Delegation, add an event to any nearest element of the projects container
-$homePage.addEventListener('click', (event) => {
-    event.preventDefault();
-    $currentSelectedTaskTab = event.target.closest('.new-row-wrapper');
+homePage.addEventListener('click', (event) => {
+    const taskRow = event.target.closest('.task-row');
 
-    // If a project tab isn't clicked, ignore it
-    if (!$currentSelectedTaskTab) return;
-
-    for(let i = 0; i < currentJSProject.taskList.length; i++){
-        if(currentJSProject.taskList[i].taskID == $currentSelectedTaskTab.dataset.ID){
-            currentJSTaskSelected = currentJSProject.taskList[i];
-        }
+    // If a task row isn't clicked, ignore it
+    if (!taskRow || !currentProject) {
+        return;
     }
 
-    if(currentJSTaskSelected.taskStatus == false){
-        $createEditTaskDialog.showModal();
+    selectedTaskElement = taskRow;
+    selectedTask = currentProject.taskList.find(
+        (task) => task.id === selectedTaskElement.dataset.taskId
+    );
 
-        $createEditTaskForm.elements.editDescription.value = currentJSTaskSelected.taskDescription;
-        $createEditTaskForm.elements.editPriority.value = currentJSTaskSelected.taskPriority;
-        $createEditTaskForm.elements.editDueDate.value = currentJSTaskSelected.taskDueDate;
+    if (!selectedTask || selectedTask.isCompleted) {
+        return;
     }
+
+    editTaskDialog.showModal();
+    editTaskForm.elements.editDescription.value = selectedTask.description;
+    editTaskForm.elements.editPriority.value = selectedTask.priority;
+    editTaskForm.elements.editDueDate.value = selectedTask.dueDate;
 });
 
-$createEditTaskForm.addEventListener('submit', (event)=>{
+editTaskForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    currentJSTaskSelected.editTaskDescription($createEditTaskForm.elements.editDescription.value);
-    currentJSTaskSelected.editTaskPriority($createEditTaskForm.elements.editPriority.value);
-    currentJSTaskSelected.editTaskDueDate($createEditTaskForm.elements.editDueDate.value);
+    if (!selectedTask || !currentProject) {
+        return;
+    }
 
-    currentJSProject.updateTaskLists();
+    selectedTask.editTaskDescription(editTaskForm.elements.editDescription.value);
+    selectedTask.editTaskPriority(editTaskForm.elements.editPriority.value);
+    selectedTask.editTaskDueDate(editTaskForm.elements.editDueDate.value);
 
-    $createEditTaskDialog.close();
-    $createEditTaskForm.reset();
+    currentProject.updateTaskLists();
+    editTaskDialog.close();
+    editTaskForm.reset();
 
-    renderProjectPage(getProjectFromLocalStorage(currentJSProject.ID), $currentSelectedProjectTab, currentTaskFilter);
-    console.log(currentJSProject.taskList);
+    renderProjectPage(currentProject, selectedProjectElement, currentTaskFilter);
 });
 
-
-$closeEditTaskDialog.addEventListener('click', ()=>{
-    $createEditTaskDialog.close();
+closeEditTaskDialogButton.addEventListener('click', () => {
+    editTaskDialog.close();
 });
-
 
 // ============================================================
 // DELETE TASK BUTTON
 // ============================================================
-$deleteTaskBtn.addEventListener('click', ()=>{
-    currentJSProject.deleteTask(currentJSTaskSelected.taskID);
-    currentJSProject.updateTaskLists();
 
-    $createEditTaskDialog.close();
-    alert("Task Deleted!");
-    renderProjectPage(getProjectFromLocalStorage(currentJSProject.ID), $currentSelectedProjectTab, currentTaskFilter);
+deleteTaskButton.addEventListener('click', () => {
+    if (!selectedTask || !currentProject) {
+        return;
+    }
+
+    currentProject.deleteTask(selectedTask.id);
+    editTaskDialog.close();
+    alert('Task Deleted!');
+
+    renderProjectPage(currentProject, selectedProjectElement, currentTaskFilter);
 });
-
 
 // ============================================================
 // COMPLETE TASK BUTTON
 // ============================================================
-$statusTaskBtn.addEventListener('click', ()=>{
-    currentJSTaskSelected.completeTask();
-    $currentSelectedTaskTab.classList.add("completed");
 
-    currentJSProject.updateTaskLists();
-    $createEditTaskDialog.close();
+completeTaskButton.addEventListener('click', (event) => {
+    event.preventDefault();
 
-    renderProjectPage(getProjectFromLocalStorage(currentJSProject.ID), $currentSelectedProjectTab, currentTaskFilter);
+    if (!selectedTask || !currentProject) {
+        return;
+    }
+
+    selectedTask.completeTask();
+    currentProject.updateTaskLists();
+    editTaskDialog.close();
+
+    renderProjectPage(currentProject, selectedProjectElement, currentTaskFilter);
 });
 
-
-
-function buildProjectPageHeader(currentJSProject, currentSelectedProjectHTML){
-    $homePage.replaceChildren(); // Clear the main section of home page before rendering content
+function buildProjectPageHeader(project) {
+    homePage.replaceChildren(); // Clear the main section of home page before rendering content
 
     /*
-    * ============================================================
-    *  BUILD THE PROJECT TITLE AND DROPBOX
-    * ============================================================
-    */
+     * ============================================================
+     * BUILD THE PROJECT TITLE AND DROPDOWN
+     * ============================================================
+     */
 
+    const projectHeader = document.createElement('h1');
+    projectHeader.id = 'project-header';
+    projectHeader.textContent = project.name;
+    homePage.appendChild(projectHeader);
 
-    const $projectHeader = document.createElement('h1');
-    $projectHeader.id = "project-header";
-    $projectHeader.textContent = currentJSProject.name;
-    $homePage.appendChild($projectHeader);
-
-    const $filterForm = document.createElement('form');
-
-    $filterForm.action = '';
-    $filterForm.method = 'POST';
-    $filterForm.id = "task-filter-form";
+    const filterForm = document.createElement('form');
+    filterForm.action = '';
+    filterForm.method = 'POST';
+    filterForm.id = 'task-filter-form';
 
     // Create the label for the dropdown.
-    const $filterFormLabel = document.createElement('label');
-    $filterFormLabel.textContent = "Select Filter";
-    $filterFormLabel.htmlFor = 'taskFilters';
+    const filterLabel = document.createElement('label');
+    filterLabel.textContent = 'Select Filter';
+    filterLabel.htmlFor = 'task-filters';
 
-    const $filterDropbox = document.createElement('select');
-    $filterDropbox.name = 'taskDropbox';
-    $filterDropbox.id = 'taskDropbox';
+    const filterDropdown = document.createElement('select');
+    filterDropdown.name = 'taskFilter';
+    filterDropdown.id = 'task-filters';
 
     const filterOptions = ['Default', 'Date', 'Priority'];
-    filterOptions.forEach((filterOption) =>{
-        const $option = document.createElement('option');
-        $option.value = filterOption;
-        $option.textContent = filterOption.charAt(0).toUpperCase() + filterOption.slice(1);
-        $filterDropbox.appendChild($option);
+    filterOptions.forEach((filterOption) => {
+        const option = document.createElement('option');
+        option.value = filterOption;
+        option.textContent = filterOption;
+        filterDropdown.appendChild(option);
     });
 
-    // Default value is january
-    $filterDropbox.value = 'Default';
+    filterDropdown.value = currentTaskFilter;
 
-    $filterForm.appendChild($filterFormLabel);
-    $filterForm.appendChild($filterDropbox);
-    $homePage.appendChild($filterForm);
+    filterForm.append(filterLabel, filterDropdown);
+    homePage.appendChild(filterForm);
 
-
-    $filterDropbox.addEventListener('change', (event) => {
+    filterDropdown.addEventListener('change', (event) => {
         currentTaskFilter = event.target.value;
-
-        document.querySelector('#todo-list-chart').remove();
-        buildProjectListHeader(getProjectFromLocalStorage(currentJSProject.ID), currentSelectedProjectHTML, currentTaskFilter);
+        renderProjectPage(project, selectedProjectElement, currentTaskFilter);
     });
 
-    renderProjectPage(currentJSProject, currentSelectedProjectHTML, currentTaskFilter);
+    renderProjectPage(project, selectedProjectElement, currentTaskFilter);
 }
-
 
 /*
  * ============================================================
@@ -247,85 +238,66 @@ function buildProjectPageHeader(currentJSProject, currentSelectedProjectHTML){
  * ============================================================
  */
 
-
-function renderProjectPage(currentJSProject, currentSelectedProjectHTML, taskListDropbox){
-    if(document.querySelector('#todo-list-chart') != null){
-        document.querySelector('#todo-list-chart').remove();
-    }
-    buildProjectListHeader(currentJSProject, currentSelectedProjectHTML,taskListDropbox);
+function renderProjectPage(project, projectElement, taskFilter) {
+    homePage.querySelector('#todo-list-chart')?.remove();
+    buildProjectListHeader(project, projectElement, taskFilter);
 }
 
-
-
-/**
- *
- * @param {object} currentProjectJS
- * The project object reflecting the currently selected project HTML element
- * 
- * 
- * @param {HTML} currentProjectHTML
- * The currently selected project HTML element
- * 
- * @param {HTML} taskListDropbox
- * The HTML element for the dropbox regarding task filtering
- * 
- */
-
-function buildProjectListHeader(currentJSProject, currentSelectedProjectHTML, taskListDropbox){
-
+function buildProjectListHeader(project, projectElement, taskFilter) {
     /*
-    * ============================================================
-    *  BUILD THE HEADER FOR THE TO-DO LIST CHART
-    * ============================================================
-    */
+     * ============================================================
+     * BUILD THE HEADER FOR THE TO-DO LIST CHART
+     * ============================================================
+     */
 
     // Container for the entire todoList chart
-    const $todoListChart = document.createElement('div');
-    $todoListChart.id = "todo-list-chart";
-    $todoListChart.style.margin = "2rem"; // Add to the css file later
-    $homePage.appendChild($todoListChart);
+    const todoListChart = document.createElement('div');
+    todoListChart.id = 'todo-list-chart';
+    todoListChart.classList.add('project-task-list');
+    homePage.appendChild(todoListChart);
 
     // Container for the header for the todoList
-    const $todoListRowHeader = document.createElement('div');
-    $todoListRowHeader.classList.add("todo-list-row-header");
-    $todoListChart.appendChild($todoListRowHeader);
+    const todoListHeader = document.createElement('div');
+    todoListHeader.classList.add('todo-list-row-header');
+    todoListChart.appendChild(todoListHeader);
 
     // Create the column for the task descriptions
-    const $taskDescriptionHeader = document.createElement('div');
-    $taskDescriptionHeader.id = "task-description-header";
-    $taskDescriptionHeader.textContent = "Description";
-    $todoListRowHeader.appendChild($taskDescriptionHeader);
+    const descriptionHeader = document.createElement('div');
+    descriptionHeader.textContent = 'Description';
+    todoListHeader.appendChild(descriptionHeader);
 
     // Create the column for the task status
-    const $taskStatusHeader = document.createElement('div');
-    $taskStatusHeader.id = "task-status-header";
-    $taskStatusHeader.textContent = "Status";
-    $todoListRowHeader.appendChild($taskStatusHeader);
+    const statusHeader = document.createElement('div');
+    statusHeader.textContent = 'Status';
+    todoListHeader.appendChild(statusHeader);
 
     // Create the column for the task priority
-    const $taskPriorityHeader = document.createElement('div');
-    $taskPriorityHeader.id = "task-priority-header";
-    $taskPriorityHeader.textContent = "Priority";
-    $todoListRowHeader.appendChild($taskPriorityHeader);
+    const priorityHeader = document.createElement('div');
+    priorityHeader.textContent = 'Priority';
+    todoListHeader.appendChild(priorityHeader);
 
     // Create the column for the task date
-    const $taskDateHeader = document.createElement('div');
-    $taskDateHeader.id = "task-date-header";
-    $taskDateHeader.textContent = "Due Dates";
-    $todoListRowHeader.appendChild($taskDateHeader);
+    const dueDateHeader = document.createElement('div');
+    dueDateHeader.textContent = 'Due Date';
+    todoListHeader.appendChild(dueDateHeader);
 
     /*
-    * ============================================================
-    *  CREATE THE ROWS FOR THE TO-DO LIST CHART
-    * ============================================================
-    */
+     * ============================================================
+     * CREATE THE ROWS FOR THE TO-DO LIST CHART
+     * ============================================================
+     */
 
-    const $taskRowsContainer = document.createElement('div');
-    $taskRowsContainer.id = "task-row";
+    const taskRowsContainer = document.createElement('div');
+    taskRowsContainer.classList.add('task-rows');
 
-    buildProjectListTasks(currentSelectedProjectHTML, $taskRowsContainer, currentJSProject, $todoListChart, taskListDropbox);
+    buildProjectListTasks(
+        projectElement,
+        taskRowsContainer,
+        project,
+        todoListChart,
+        taskFilter
+    );
 }
-
 
 /*
  * ============================================================
@@ -333,131 +305,68 @@ function buildProjectListHeader(currentJSProject, currentSelectedProjectHTML, ta
  * ============================================================
  */
 
+export function buildProjectListTasks(
+    currentProjectElement,
+    taskRowsContainer,
+    project,
+    todoList,
+    taskFilter
+) {
+    let renderedTaskList = project.taskList;
 
-
-/**
- *
- * @param {HTML} project
- * The current project html element
- * 
- * @param {HTML} taskRowContainer
- * The HTML element for the current task row
- * 
- * 
- * @param {Object} currentProjectJS
- * The currently selected project in javascript "backend"
- * 
- * 
- * @param {HTML} todoList
- * The HTML element for the entire todoList chart
- * 
- * @param {HTML} taskListDropbox
- * The HTML element for the dropbox regarding task filtering
- * 
- */
-
-
-
-export function buildProjectListTasks(currentHTMLProject, taskRowContainer, currentProjectJS, todoList, taskListDropbox){
-    
-    if(currentProjectJS.taskList.length > 0){
-        let renderedTaskList;
-        if(currentTaskFilter == "Date"){
-            renderedTaskList = currentProjectJS.taskListDueDates;
-        }else if(currentTaskFilter == "Priority"){
-            renderedTaskList = currentProjectJS.taskListPriority;
-        }else{
-            renderedTaskList = currentProjectJS.taskList;
-        }
-
-        for(const task of renderedTaskList){
-
-            const newlyCreatedRow = document.createElement('div');
-            newlyCreatedRow.classList.add("new-row-wrapper");
-            newlyCreatedRow.dataset.ID = task.taskID;
-
-
-            // Create task description column, add styling and add to the task-row container
-            const $taskDescription = document.createElement('div');
-            $taskDescription.id = "task-description";
-            $taskDescription.classList.add('task');
-            $taskDescription.textContent = task.taskDescription;
-            newlyCreatedRow.appendChild($taskDescription);
-
-             // Create task status, add styling and add to the task-row container
-            const $taskStatus = document.createElement('div');
-            $taskStatus.id = "task-status" 
-            $taskStatus.classList.add('task');
-            $taskStatus.dataset.ID = task.ID;
-
-            const $taskStatusBtn = document.createElement('div');
-            $taskStatusBtn.id = "task-status-btn";
-            $taskStatus.appendChild($taskStatusBtn);
-            newlyCreatedRow.appendChild($taskStatus);
-
-            // Create task priority column, add styling and add to the task-row container
-            const $taskPriority = document.createElement('div');
-            $taskPriority.id = "task-priority";
-            $taskPriority.classList.add('task');
-            $taskPriority.textContent = task.taskPriority;
-            $taskPriority.dataset.ID = task.ID;
-            newlyCreatedRow.appendChild($taskPriority);
-
-            if(task.taskPriority == "Low"){
-                $taskPriority.style.color = "yellow";
-            }else if(task.taskPriority == "Medium"){
-                $taskPriority.style.color = "orange";
-            }else{
-                $taskPriority.style.color = "red";
-            }
-
-
-            // Create task priority column, add styling and add to the task-row container
-            const $taskDate = document.createElement('div');
-            $taskDate.id = "task-date";
-            $taskDate.classList.add('task');
-            $taskDate.textContent = task.taskDueDate;
-            $taskDate.dataset.ID = task.ID;
-            newlyCreatedRow.appendChild($taskDate);
-
-
-            if(task.taskStatus == true){
-                $taskStatusBtn.textContent = "Completed!";
-                $taskDescription.classList.replace("task", "task-completed");
-                $taskStatus.classList.replace("task", "task-completed");
-                $taskStatusBtn.style.backgroundColor = "#2a721c"; $taskStatusBtn.style.fontSize = "1.5rem"; $taskStatusBtn.style.fontWeight = "bold";
-    
-                $taskPriority.classList.replace("task", "task-completed");
-                $taskDate.classList.replace("task", "task-completed");
-            }else{
-                $taskStatusBtn.textContent = "Not Completed!";
-            }
-
-
-            // Wrapper div used for row selection
-            taskRowContainer.appendChild(newlyCreatedRow);
-
-            // Append everything to the todoList chart container
-            todoList.appendChild(taskRowContainer);
-
-            // Add the create new row at the end for future tasks
-            todoList.appendChild($createTaskRow);            
-
-
-        }
-    }else{
-        // If the project contains no tasks, append create new row at the end for future tasks
-        todoList.appendChild($createTaskRow);
+    if (taskFilter === 'Date') {
+        renderedTaskList = project.taskListDueDates;
+    } else if (taskFilter === 'Priority') {
+        renderedTaskList = project.taskListPriority;
     }
-    
 
+    for (const task of renderedTaskList) {
+        const taskRow = document.createElement('div');
+        taskRow.classList.add('task-row');
+        taskRow.dataset.taskId = task.id;
+
+        // Create task description column, add styling and add to the task-row container
+        const taskDescription = document.createElement('div');
+        taskDescription.classList.add('task-cell', 'task-description');
+        taskDescription.textContent = task.description;
+        taskRow.appendChild(taskDescription);
+
+        // Create task status, add styling and add to the task-row container
+        const taskStatus = document.createElement('div');
+        taskStatus.classList.add('task-cell', 'task-status');
+
+        const taskStatusButton = document.createElement('div');
+        taskStatusButton.classList.add('task-status-button');
+        taskStatus.appendChild(taskStatusButton);
+        taskRow.appendChild(taskStatus);
+
+        // Create task priority column, add styling and add to the task-row container
+        const taskPriority = document.createElement('div');
+        taskPriority.classList.add('task-cell', 'task-priority', `priority-${task.priority.toLowerCase()}`);
+        taskPriority.textContent = task.priority;
+        taskRow.appendChild(taskPriority);
+
+        // Create task date column, add styling and add to the task-row container
+        const taskDate = document.createElement('div');
+        taskDate.classList.add('task-cell', 'task-date');
+        taskDate.textContent = task.dueDate;
+        taskRow.appendChild(taskDate);
+
+        if (task.isCompleted) {
+            taskStatusButton.textContent = 'Completed!';
+            taskStatusButton.classList.add('task-status-completed');
+            taskRow.classList.add('task-row-completed');
+        } else {
+            taskStatusButton.textContent = 'Not Completed!';
+        }
+
+        // Wrapper div used for row selection
+        taskRowsContainer.appendChild(taskRow);
+    }
+
+    // Append everything to the todoList chart container
+    todoList.appendChild(taskRowsContainer);
+
+    // Add the create new row at the end for future tasks
+    todoList.appendChild(createTaskRow);
 }
-
-
-
-
-    
-    
-
-
-

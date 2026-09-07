@@ -1,12 +1,10 @@
-function getProjectFromLocalStorage(projectID){
-    const allRetriviedProjects = getAllProjectsFromLocalStorage();
-    const retrivedProject = allRetriviedProjects.find(project => project.ID === projectID);
-    return retrivedProject;
+function getProjectFromLocalStorage(projectID) {
+    const savedProjects = getAllProjectsFromLocalStorage();
+    return savedProjects?.find((project) => project.ID === projectID);
 }
 
-function getAllProjectsFromLocalStorage(){
-    return JSON.parse(localStorage.getItem("allProjects"));
+function getAllProjectsFromLocalStorage() {
+    return JSON.parse(localStorage.getItem('allProjects'));
 }
 
-
-export {getAllProjectsFromLocalStorage, getProjectFromLocalStorage};
+export { getAllProjectsFromLocalStorage, getProjectFromLocalStorage };

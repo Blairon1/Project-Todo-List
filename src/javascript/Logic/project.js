@@ -1,46 +1,60 @@
-import Task from "./task.js"
-import { format, compareAsc, getTime, compareDesc} from "date-fns";
-import allProjects from "./projectCollection.js";
+import { compareAsc } from 'date-fns';
+import Task from './task.js';
+import allProjects from './projectCollection.js';
 
 export default class Project {
-
     static currentTaskNumber = 1;
 
-    constructor(name, taskList){
+    constructor(name, taskList = []) {
         this.name = name;
         this.taskList = taskList;
-        this.ID = crypto.randomUUID();
+        this.id = crypto.randomUUID();
 
         this.taskListDueDates = [];
         this.taskListPriority = [];
     }
 
-    updateTaskLists(){
-        this.taskListDueDates = [...this.taskList].sort((taskOne, taskTwo) =>compareAsc(taskOne.taskDueDate, taskTwo.taskDueDate));
-        this.taskListPriority = [...this.taskList.filter(task=>{return task.taskPriority == "High"}), ...this.taskList.filter(task=>{return task.taskPriority == "Medium"}), ...this.taskList.filter(task=>{return task.taskPriority == "Low"})];
-        localStorage.setItem("allProjects", JSON.stringify(allProjects.projects));
+    updateTaskLists() {
+        this.taskListDueDates = [...this.taskList].sort((firstTask, secondTask) =>
+            compareAsc(firstTask.dueDate, secondTask.dueDate)
+        );
+
+        this.taskListPriority = [
+            ...this.taskList.filter((task) => task.priority === 'High'),
+            ...this.taskList.filter((task) => task.priority === 'Medium'),
+            ...this.taskList.filter((task) => task.priority === 'Low'),
+        ];
+
+        localStorage.setItem('allProjects', JSON.stringify(allProjects.projects));
     }
 
-    createTask(taskDescription, taskPriority, taskDueDate, taskStatus){
-        const task = new Task(Project.currentTaskNumber, taskDescription, taskPriority, taskDueDate, taskStatus);
-        
-        this.taskList.push(task);
+    createTask(newDescription, newPriority, newDueDate, newStatus) {
+        const newTask = new Task(
+            Project.currentTaskNumber,
+            newDescription,
+            newPriority,
+            newDueDate,
+            newStatus
+        );
 
+        this.taskList.push(newTask);
         this.updateTaskLists();
         Project.currentTaskNumber++;
-        localStorage.setItem("allProjects", JSON.stringify(allProjects.projects));
+
+        localStorage.setItem('allProjects', JSON.stringify(allProjects.projects));
     }
 
-    deleteTask(taskNumber){
-        for(let taskIndex = 0; taskIndex < this.taskList.length; taskIndex++){
-            if(this.taskList[taskIndex].taskID == taskNumber){
+    deleteTask(taskID) {
+        for (let taskIndex = 0; taskIndex < this.taskList.length; taskIndex++) {
+            if (this.taskList[taskIndex].id === taskID) {
                 console.log(`Found you: ${this.taskList[taskIndex].taskDescription}`);
-                this.taskList.splice(taskIndex, taskIndex + 1);
+                this.taskList.splice(taskIndex, 1);
                 console.table(this.taskList);
+                break;
             }
         }
-        this.updateTaskLists();
 
-        localStorage.setItem("allProjects", JSON.stringify(allProjects.projects));
+        this.updateTaskLists();
+        localStorage.setItem('allProjects', JSON.stringify(allProjects.projects));
     }
-};
+}

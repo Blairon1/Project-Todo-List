@@ -1,39 +1,94 @@
 import Project from '../Logic/project.js';
-import allProjects  from "../Logic/projectCollection.js";
-import {getAllProjectsFromLocalStorage} from "../LocalStorageMethods/getProject.js";
+import Task from '../Logic/task.js';
+import allProjects from '../Logic/projectCollection.js';
+import { getAllProjectsFromLocalStorage } from '../LocalStorageMethods/getProject.js';
 import closeIcon from '../../assets/icons/close.svg';
-import {loadCalendarPage} from './domCalendar.js';
+import { loadCalendarPage } from './domCalendar.js';
 
 /*
  * ============================================================
- * Dom References
+ * DOM REFERENCES
  * ============================================================
  */
 
-const $createProjectDialog = document.querySelector('#project-modal');
-const $openProjectButton = document.querySelector('#plus-icon');
-const $closeProjectButton = document.querySelector('#close-icon');
-
-const $createProjectForm = document.querySelector('#create-project-form');
-const $projectsTab = document.querySelector('#projects');
-
-const $projectDeleteBtn = document.querySelector('project-delete-icon');
+const projectDialog = document.querySelector('#project-modal');
+const openProjectButton = document.querySelector('#plus-icon');
+const closeProjectButton = document.querySelector('#close-icon');
+const createProjectForm = document.querySelector('#create-project-form');
+const projectsContainer = document.querySelector('#projects');
 
 /*
  * ============================================================
- * OPEN/CLOSE PROJECT CREATION PROMPT 
+ * OPEN/CLOSE PROJECT CREATION PROMPT
  * ============================================================
  */
 
-
-$openProjectButton.addEventListener('click', ()=>{
-    $createProjectDialog.showModal();
+openProjectButton.addEventListener('click', () => {
+    projectDialog.showModal();
 });
 
-$closeProjectButton.addEventListener('click', ()=>{
-    $createProjectDialog.close();
-})
+closeProjectButton.addEventListener('click', () => {
+    projectDialog.close();
+});
 
+/*
+ * ============================================================
+ * PROJECT SIDEBAR HELPERS
+ * ============================================================
+ */
+
+function createProjectSidebarItem(project) {
+    // Add a new project container
+    const projectContainer = document.createElement('div');
+    projectContainer.classList.add('project-item');
+    projectContainer.dataset.projectId = project.id;
+
+    // Add the new project to the tab in the sidebar
+    const projectTab = document.createElement('div');
+    projectTab.classList.add('project-name');
+    projectTab.textContent = project.name;
+    projectTab.dataset.projectId = project.id;
+    projectContainer.appendChild(projectTab);
+
+    // Add a close icon button to delete project
+    const deleteProjectIcon = document.createElement('img');
+    deleteProjectIcon.src = closeIcon;
+    deleteProjectIcon.alt = 'Delete Icon';
+    deleteProjectIcon.classList.add('project-delete-icon');
+    deleteProjectIcon.dataset.projectId = project.id;
+    projectContainer.appendChild(deleteProjectIcon);
+
+    return projectContainer;
+}
+
+function restoreProject(savedProject) {
+    // Creating new instances ensures methods are preserved after JSON parsing
+    const restoredProject = new Project(savedProject.name, []);
+    restoredProject.id = savedProject.id;
+
+    for (const savedTask of savedProject.taskList ?? []) {
+        const restoredTask = new Task(
+            savedTask.taskNumber,
+            savedTask.description,
+            savedTask.priority,
+            savedTask.dueDate,
+            savedTask.isCompleted
+        );
+
+        restoredTask.id = savedTask.id;
+        restoredProject.taskList.push(restoredTask);
+    }
+
+    restoredProject.taskListDueDates = [...restoredProject.taskList].sort(
+    (firstTask, secondTask) => firstTask.dueDate.localeCompare(secondTask.dueDate) );
+    restoredProject.taskListPriority = [
+        ...restoredProject.taskList.filter((task) => task.priority === 'High'),
+        ...restoredProject.taskList.filter((task) => task.priority === 'Medium'),
+        ...restoredProject.taskList.filter((task) => task.priority === 'Low'),
+    ];
+
+    return restoredProject;
+}
 
 /*
  * ============================================================
@@ -41,125 +96,66 @@ $closeProjectButton.addEventListener('click', ()=>{
  * ============================================================
  */
 
-
-$createProjectForm.addEventListener('submit', (event)=>{
+createProjectForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
+    const projectName = createProjectForm.elements.projectName.value;
+
     // Create Project object with description and empty task list
-    const newProject = new Project($createProjectForm.elements.projectName.value, []);
+    const newProject = new Project(projectName, []);
 
-    // Add a new project container
-    const newProjectTabContainer = document.createElement('div');
-    newProjectTabContainer.classList.add('new-project-container');
-    newProjectTabContainer.dataset.ID = newProject.ID;
+    projectsContainer.appendChild(createProjectSidebarItem(newProject));
+    allProjects.addProject(newProject); // Add the new project object to the projectCollection object
 
-
-    // Add the new project to the tab in the sidebar
-    const newProjectTab = document.createElement('div'); 
-    newProjectTab.classList.add('new-projects');
-    newProjectTab.textContent = $createProjectForm.elements.projectName.value;
-    newProjectTab.dataset.ID = newProject.ID;
-    newProjectTabContainer.appendChild(newProjectTab);
-
-    // Add a close icon button to delete project
-    const deleteProjectIcon = document.createElement('img');
-    deleteProjectIcon.src = closeIcon;
-    deleteProjectIcon.alt = "Delete Icon";
-    deleteProjectIcon.id = "project-delete-icon";
-    deleteProjectIcon.dataset.ID = newProject.ID;
-    newProjectTabContainer.appendChild(deleteProjectIcon);
-    
-
-    $projectsTab.appendChild(newProjectTabContainer); // Add to the HTML projects tab
-    allProjects.addProject(newProject);               // Add the new project object to the projectCollection object
-
-
-    $createProjectDialog.close();
-    $createProjectForm.elements.projectName.value = '';
-})
-
-
+    projectDialog.close();
+    createProjectForm.reset();
+});
 
 /*
  * ============================================================
  * DELETE PROJECT
  * ============================================================
  */
-//Event Delegation, add an event to any nearest element of the projects container
-$projectsTab.addEventListener('click', (event) => {
 
-    const $clickedProject = event.target.closest('.new-project-container');
-    //console.log("Delete button clicked!");
+// Event Delegation, add an event to any nearest element of the projects container
+projectsContainer.addEventListener('click', (event) => {
+    const projectContainer = event.target.closest('.project-item');
+
     // Check if a delete button is being clicked
-    if(event.target.matches ('#project-delete-icon')){
-        //console.log("Jackpot!");
-        allProjects.deleteProject($clickedProject);
-        $projectsTab.removeChild($clickedProject);
+    if (event.target.matches('.project-delete-icon') && projectContainer) {
+        allProjects.deleteProject(projectContainer);
+        projectContainer.remove();
         loadCalendarPage();
     }
-
 });
-
 
 /*
  * ============================================================
  * BUILD PROJECT SIDEBAR
  * ============================================================
  */
-function buildProjectSidebar(){
-    const allProjectsSavedLS = getAllProjectsFromLocalStorage();
-    
-    if(allProjectsSavedLS != null){
-        for(let projectIndex = 0; projectIndex < allProjectsSavedLS.length; projectIndex++){
-            // Create Project object with description and empty task list
-            const newProject = new Project(allProjectsSavedLS[projectIndex].name, []);
-            newProject.ID = allProjectsSavedLS[projectIndex].ID;
 
-            for(let taskIndex = 0; taskIndex < allProjectsSavedLS[projectIndex].taskList.length; taskIndex++){
-                newProject.createTask
-                    (
-                      allProjectsSavedLS[projectIndex].taskList[taskIndex].taskDescription // Creating a new task ensures methods are preserved after JSON parsing
-                    , allProjectsSavedLS[projectIndex].taskList[taskIndex].taskPriority
-                    , allProjectsSavedLS[projectIndex].taskList[taskIndex].taskDueDate
-                    , allProjectsSavedLS[projectIndex].taskList[taskIndex].taskStatus
-                    );
-                newProject.taskList[taskIndex].taskID = allProjectsSavedLS[projectIndex].taskList[taskIndex].taskID; // Maintain the same ID
-            }
+function buildProjectSidebar() {
+    const savedProjects = getAllProjectsFromLocalStorage();
 
-            // Add a new project container
-            const newProjectTabContainer = document.createElement('div');
-            newProjectTabContainer.classList.add('new-project-container');
-            newProjectTabContainer.dataset.ID = newProject.ID;
+    if (!savedProjects) {
+        return;
+    }
 
+    for (const savedProject of savedProjects) {
+        const restoredProject = restoreProject(savedProject);
 
-            // Add the new project to the tab in the sidebar
-            const newProjectTab = document.createElement('div'); 
-            newProjectTab.classList.add('new-projects');
-            newProjectTab.textContent = allProjectsSavedLS[projectIndex].name;
-            newProjectTab.dataset.ID = newProject.ID;
-            newProjectTabContainer.appendChild(newProjectTab);
-
-            // Add a close icon button to delete project
-            const deleteProjectIcon = document.createElement('img');
-            deleteProjectIcon.src = closeIcon;
-            deleteProjectIcon.alt = "Delete Icon";
-            deleteProjectIcon.id = "project-delete-icon";
-            deleteProjectIcon.dataset.ID = newProject.ID;
-            newProjectTabContainer.appendChild(deleteProjectIcon);
-            
-
-            $projectsTab.appendChild(newProjectTabContainer); // Add to the HTML projects tab
-            allProjects.addProject(newProject);               // Add the new project object to the projectCollection object
-        }
+        projectsContainer.appendChild(createProjectSidebarItem(restoredProject));
+        allProjects.addProject(restoredProject); // Add the new project object to the projectCollection object
     }
 }
-
 
 /*
  * ============================================================
  * RENDER PROJECT SIDEBAR
  * ============================================================
  */
-(function renderProjectSiderbar(){
+
+(function renderProjectSidebar() {
     buildProjectSidebar();
 })();

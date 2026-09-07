@@ -1,33 +1,33 @@
-import { format, compareAsc, addDays, parseISO } from "date-fns"
-import allProjects  from "./projectCollection.js";
+import { format, parseISO } from 'date-fns';
+import allProjects from './projectCollection.js';
 
-export default class Task{
-    constructor(taskNumber, taskDescription, taskPriority, taskDueDate, taskStatus){
+export default class Task {
+    constructor(taskNumber, description, priority, dueDate, taskStatus) {
         this.taskNumber = taskNumber;
-        this.taskDescription = taskDescription;
-        this.taskPriority = taskPriority;
-        this.taskDueDate = format(parseISO(taskDueDate), 'yyyy-MM-dd');
-        this.taskStatus = taskStatus;
-        this.taskID = crypto.randomUUID();
+        this.description = description;
+        this.priority = priority;
+        this.dueDate = format(parseISO(dueDate), 'yyyy-MM-dd');
+        this.isCompleted = taskStatus;
+        this.id = crypto.randomUUID();
     }
 
-    completeTask(){
-        this.taskStatus = true;
-        localStorage.setItem("allProjects", JSON.stringify(allProjects.projects));
+    completeTask() {
+        this.isCompleted = true;
+        localStorage.setItem('allProjects', JSON.stringify(allProjects.projects));
     }
 
-    editTaskDescription(newDescription){
-        this.taskDescription = newDescription;
-        localStorage.setItem("allProjects", JSON.stringify(allProjects.projects));
+    editTaskDescription(newDescription) {
+        this.description = newDescription;
+        localStorage.setItem('allProjects', JSON.stringify(allProjects.projects));
     }
 
-    editTaskPriority(newTaskPriority){
-        this.taskPriority = newTaskPriority;
-        localStorage.setItem("allProjects", JSON.stringify(allProjects.projects));
+    editTaskPriority(newPriority) {
+        this.priority = newPriority;
+        localStorage.setItem('allProjects', JSON.stringify(allProjects.projects));
     }
 
-    editTaskDueDate(newTaskDueDate){
-        this.taskDueDate = newTaskDueDate;
-        localStorage.setItem("allProjects", JSON.stringify(allProjects.projects));
+    editTaskDueDate(newDueDate) {
+        this.dueDate = newDueDate;
+        localStorage.setItem('allProjects', JSON.stringify(allProjects.projects));
     }
 }
