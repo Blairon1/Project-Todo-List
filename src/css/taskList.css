@@ -20,10 +20,13 @@
     font-style: normal;
 }
 
+#project-header{
+    margin-bottom: 2rem;
+}
+
 #task-filter-form {
     display: flex;
     gap: 1.3rem;
-
     font-size: 2rem;
 }
 
@@ -329,8 +332,8 @@
     font-size: 1.1rem;
     padding: 0.25rem;
 
-    box-sizing: border-box; /* Keeps padding inside the defined width/height */
-    resize: none;         /* Disables the drag-to-resize handle */
+    box-sizing: border-box; 
+    resize: none;         
     text-align: left;
 }
 

@@ -16,12 +16,11 @@
 body {
     min-height: 100vh;
     width: 100%;
-    /*overflow-x: hidden; /* Prevent horizontal scrolling entirely */
 }
 
 img {
     max-width: 100%;
-    height: auto; /* Keeps the image from getting distorted */
+    height: auto; 
 }
 
 /* Shared Sidebar and Header Styling */
@@ -40,7 +39,6 @@ img {
     font-weight: 600;
     font-style: normal;
 
-    /*background-color: #f8552c;*/
     background-color: #7faafa;
     box-shadow: 0 8px 2px -2px rgba(0, 0, 0, 0.2);
 }
@@ -319,6 +317,5 @@ option:disabled {
 
 #create-project-buttons button:hover {
     cursor: pointer;
-    /*background-color: #8a3019;*/
     background-color: #35435e;
 }

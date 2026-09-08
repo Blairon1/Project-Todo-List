@@ -84,7 +84,7 @@ function loadCalendarPage() {
         const option = document.createElement('option');
         option.value = month;
         option.textContent = month.charAt(0).toUpperCase() + month.slice(1);
-        monthDropdown.appendChild(option); // Convert first letter to uppercase and add to the calendar dropdown
+        monthDropdown.appendChild(option); 
     });
 
     // Default value is january

@@ -79,8 +79,7 @@ function restoreProject(savedProject) {
         restoredProject.taskList.push(restoredTask);
     }
 
-    restoredProject.taskListDueDates = [...restoredProject.taskList].sort(
-    (firstTask, secondTask) => firstTask.dueDate.localeCompare(secondTask.dueDate) );
+    restoredProject.taskListDueDates = [...restoredProject.taskList].sort((firstTask, secondTask) => firstTask.dueDate.localeCompare(secondTask.dueDate) );
     restoredProject.taskListPriority = [
         ...restoredProject.taskList.filter((task) => task.priority === 'High'),
         ...restoredProject.taskList.filter((task) => task.priority === 'Medium'),
