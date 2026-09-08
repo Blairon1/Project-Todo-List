@@ -126,6 +126,7 @@ projectsContainer.addEventListener('click', (event) => {
         allProjects.deleteProject(projectContainer);
         projectContainer.remove();
         loadCalendarPage();
+        alert("Project Deleted!");
     }
 });
 

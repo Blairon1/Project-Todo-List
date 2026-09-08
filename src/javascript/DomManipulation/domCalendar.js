@@ -67,6 +67,7 @@ function loadCalendarPage() {
     const monthForm = document.createElement('form');
     monthForm.action = '';
     monthForm.method = 'POST';
+    monthForm.id = "month-form";
 
     // Create the label for the dropdown.
     const monthLabel = document.createElement('label');

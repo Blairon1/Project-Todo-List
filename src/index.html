@@ -6,7 +6,7 @@
     <title>To-do List</title>
 </head>
 <body>
-    <header id="header">To-Do List Odin</header>
+    <header id="header">Todo List</header>
 
     <div class="body-wrapper">
         <aside class="sidebar">
@@ -50,6 +50,7 @@
                         placeholder="Enter Project Name:"
                         minlength="1"
                         maxlength="25"
+                        required
                     >
                 </div>
 
@@ -63,12 +64,12 @@
             <h2>Complete the following information</h2>
 
             <form id="task-form">
-                <label for="taskD">
-                    Task Description:
-                    <textarea id="taskD" name="taskD" rows="5" cols="30" placeholder="Type here..." required></textarea>
+                <label for="taskD" id="taskD-label">
+                    Task Description
+                    <textarea id="taskD" name="taskD" placeholder="Type here..." required></textarea>
                 </label>
 
-                <label for="taskP">
+                <label for="taskP" id="taskP-label">
                     Priority
                     <select id="taskP" name="taskP" required>
                         <option value="High">High</option>
@@ -77,22 +78,21 @@
                     </select>
                 </label>
 
-                <label for="taskDue">
+                <label for="taskDue" id="taskDue-label">
                     Due Date
                     <input type="date" id="taskDue" name="taskDue" required>
                 </label>
 
-                <div class="task-creation-buttons">
-                    <button type="button" id="close-taskcreation">Close</button>
-                    <button type="submit" id="save-taskcreation">Save</button>
-                </div>
+                <img src="assets/icons/close-thick.svg" alt="Close Icon" id="close-taskcreation">
+                <button type="submit" id="save-taskcreation">Save</button>
+            
             </form>
         </dialog>
 
         <dialog id="edit-task-modal">
             <form method="POST" id="edit-task-form">
                 <div id="edit-task-header">
-                    <p>Edit Task</p>
+                    <p>Task Details</p>
                 </div>
 
                 <div class="edit-task-input-container">

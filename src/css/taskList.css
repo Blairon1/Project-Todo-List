@@ -1,9 +1,9 @@
 :root {
-    --task-row-color: #ffc354;
+    --task-row-color: #ffcf77;
     --hover-task: #72541c;
     --completed-task: #2a721c;
     --todo-list-lining: #000000;
-    --create-task-btn-color: navy;
+    --create-task-btn-color: #659afc; 
 }
 
 /*
@@ -20,6 +20,15 @@
 #task-filter-form {
     display: flex;
     gap: 1.3rem;
+
+    font-size: 2rem;
+}
+
+#task-filter-form > select{
+    appearance: none;
+    background-color: var(--sidebar-background-color-darken);
+    padding: 0rem 0.5rem;
+    width: 270px;
 }
 
 /*
@@ -77,6 +86,11 @@
     background-color: var(--task-row-color);
 }
 
+
+.task-row > .task-cell{
+    overflow: ellipsis; 
+}
+
 .task-row:hover > .task-cell {
     cursor: pointer;
     background-color: var(--hover-task);
@@ -106,7 +120,7 @@
 }
 
 .priority-low {
-    color: yellow;
+    color: rgb(255, 255, 255);
 }
 
 .priority-medium {
@@ -174,9 +188,9 @@
 
 #create-new-task {
     width: 400px;
-    height: 310px;
+    height: 100%;
     padding: 1rem;
-    margin: auto;
+    margin-left: auto;
     position: relative;
 }
 
@@ -187,25 +201,79 @@
 #task-form {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 2rem;
 }
 
-textarea {
-    width: 250px;
+#taskD-label,
+#taskP-label,
+#taskDue-label{
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+
+    font-family: "Courier Prime", monospace;
+    font-weight: 700;
+    font-style: italic;
+}
+
+#taskD-label > textarea{
+    height: 120px;
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 0.25rem;
+
+    box-sizing: border-box; /* Keeps padding inside the defined width/height */
+    resize: none;         /* Disables the drag-to-resize handle */
+    text-align: left;     
+}
+
+
+
+#taskP-label > select,
+#taskDue-label > input[type='date'] {
+    width: 100%;
     height: 50px;
-    padding: 0.5rem;
+    box-sizing: border-box;
+    padding: 0rem 0.5rem;
+    background-color: var(--sidebar-background-color-darken);
+
+    font-size: 1.2rem;
 }
 
-select,
-input[type='date'] {
-    width: 250px;
-}
-
-.task-creation-buttons {
+#close-taskcreation{
     position: absolute;
-    right: 15px;
-    bottom: 15px;
+    top: 0px;
+    right: 0px;
+
+    height: 50px;
+    width: 50px;
+
+    filter: invert(14%) sepia(86%) saturate(7050%) hue-rotate(1deg) brightness(104%) contrast(117%);
 }
+
+#close-taskcreation:hover {
+    cursor: pointer;
+    filter: invert(14%) sepia(86%) saturate(7050%) hue-rotate(1deg) brightness(54%) contrast(117%);
+}
+
+#save-taskcreation{
+    width: 100%;
+    height: 35px;
+
+    background-color: var(--create-task-btn-color);
+    color: white;
+
+    font-size: 1.2rem;
+}
+
+
+#save-taskcreation:hover{
+    cursor: pointer;
+    background-color: rgba(0, 0, 128, 0.7);
+
+}
+
+
 
 /*
  * ============================================================
@@ -216,25 +284,70 @@ input[type='date'] {
 #edit-task-modal {
     position: relative;
     width: 400px;
-    height: 310px;
+    height: 100%;
     padding: 1rem;
-    margin: auto;
+    margin-left: auto;
+}
+
+#edit-task-header > p{
+    font-family: "Courier Prime", monospace;
+    font-weight: 700;
+    font-style: normal;
+
+    font-size: 1.5rem;
 }
 
 #edit-task-form {
     display: flex;
     flex-direction: column;
+    gap: 2rem;
 }
 
 .edit-task-input-container {
     display: flex;
     flex-direction: column;
+    gap: 0.5rem;
 }
 
-#save-edit-task-btn-container {
-    position: absolute;
-    right: 0;
-    bottom: 0;
+.edit-task-input-container > label{
+    font-family: "Courier Prime", monospace;
+    font-weight: 700;
+    font-style: italic;
+}
+
+.edit-task-input-container > textarea{
+    height: 120px;
+    width: 100%;
+    font-size: 1.1rem;
+    padding: 0.25rem;
+
+    box-sizing: border-box; /* Keeps padding inside the defined width/height */
+    resize: none;         /* Disables the drag-to-resize handle */
+    text-align: left;
+}
+
+.edit-task-input-container > select,
+.edit-task-input-container > input[type='date']{
+    width: 100%;
+    height: 50px;
+    box-sizing: border-box;
+    padding: 0rem 0.5rem;
+    background-color: var(--sidebar-background-color-darken);
+
+    font-size: 1.2rem;
+}
+
+
+#complete-edit-task-btn{
+    width: 100%;
+    height: 40px;
+    background-color: greenyellow;
+    color: black;
+
+    font-size: 1.2rem;
+    font-family: "Courier Prime", monospace;
+    font-weight: 600;
+    font-style: italic;
 }
 
 #close-edit-task-icon {
@@ -249,4 +362,35 @@ input[type='date'] {
 #close-edit-task-icon:hover {
     cursor: pointer;
     filter: invert(14%) sepia(86%) saturate(7050%) hue-rotate(1deg) brightness(54%) contrast(117%);
+}
+
+#save-edit-task-btn-container {
+    display: flex;
+    justify-content: space-around;
+
+    margin-top: 132px;
+
+}
+
+
+.edit-task-form-button{
+    width: 160px;
+    height: 35px;
+
+    font-family: "Archivo Black", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.edit-task-form-button:hover{
+    cursor: pointer;
+    opacity: 50%;
+}
+
+#save-edit-task-btn{
+    background-color: var(--create-task-btn-color);
+}
+
+#delete-edit-task-btn{
+    background-color: orange;
 }
