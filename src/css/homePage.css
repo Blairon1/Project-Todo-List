@@ -1,5 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Londrina+Shadow&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Courier+Prime:ital,wght@0,400;0,700;1,400;1,700&family=Londrina+Shadow&family=Rubik+Spray+Paint&display=swap');
 * {
     box-sizing: border-box;
     margin: 0;
@@ -7,6 +6,8 @@
 }
 
 :root {
+    --page-min-width: 1000px;
+
     --sidebar-background-color: rgba(128, 128, 128, 0.08);
     --sidebar-background-color-darken: rgba(128, 128, 128, 0.2);
     --white: #ffffff;
@@ -30,6 +31,7 @@ img {
     justify-content: start;
     align-items: center;
     width: 100%;
+    min-width: var(--page-min-width);
     height: 80px;
     padding: 0rem 1rem;
 
@@ -45,7 +47,8 @@ img {
 
 .body-wrapper {
     display: grid;
-    grid-template-columns: 300px minmax(0, 1fr);
+    grid-template-columns: 300px minmax(700px, 1fr);
+    min-width: var(--page-min-width);
 }
 
 .sidebar {
@@ -199,12 +202,19 @@ option:disabled {
 #calendar-container {
     display: grid;
     grid-template-rows: auto 1fr;
-    justify-content: center;
+    width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    margin-left: auto;
 }
 
 #calendar-header {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(7, minmax(100px, 1fr));
+
+    width: 100%;
+    max-width: 1200px;
+    min-width: 700px;
 }
 
 .calendar-days {
@@ -215,9 +225,12 @@ option:disabled {
 
 #calendar {
     display: grid;
-    grid-template-columns: repeat(7, minmax(0, 1fr));
-    width: min(1200px, 100%);
-    min-width: 1200px;
+    grid-template-columns: repeat(7, minmax(100px, 1fr));
+
+    width: 100%;
+    max-width: 1200px;
+    min-width: 700px;
+
     height: 700px;
     gap: 2px;
     padding: 2px;

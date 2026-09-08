@@ -15,6 +15,9 @@
 #project-header,
 #today-header {
     margin: 0 auto;
+    font-family: "Rubik Spray Paint", system-ui;
+    font-weight: 100;
+    font-style: normal;
 }
 
 #task-filter-form {
@@ -66,7 +69,12 @@
     align-items: center;
     height: 75px;
     background-color: var(--task-row-color);
+
+    font-family: "Courier Prime", monospace;
+    font-weight: 700;
+    font-style: italic;
 }
+
 
 /*
  * ============================================================
@@ -124,7 +132,7 @@
 }
 
 .priority-medium {
-    color: orange;
+    color: rgb(252, 102, 2);
 }
 
 .priority-high {
